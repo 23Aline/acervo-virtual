@@ -13,6 +13,13 @@
 </head>
 
 <body>
+
+    <div id="welcome-screen">
+        <img src="{% static 'img/biblioteca.png' %}" alt="Logo da Biblioteca" class="logo">
+        <h1>Bem-vindo ao Acervo Digital</h1>
+        <p>Clique em qualquer lugar para entrar</p>
+    </div>
+
     <header>
         <div class="navbar">
             <a href="{% url 'home' %}" class="w3-xlarge">
@@ -37,7 +44,7 @@
         </ul>
     </nav>
 
-    <main>
+    <main id="home-content">
         <div class="buscador">
             <form action="{% url 'home' %}" method="GET" class="pesquisa">
                 <input type="text" name="q" value="{{ request.GET.q }}"
