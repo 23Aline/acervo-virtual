@@ -107,8 +107,12 @@ main {
 
 #welcome-screen p {
     font-size: 18px;
-    color: white;
+    color: #1C325B;
     margin-top: -5px;
+    background-color: white;
+    padding: 10px 12px;
+    border-radius: 20px;
+    font-weight: bold;
 }
 
 #welcome-screen .logo {
