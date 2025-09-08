@@ -46,20 +46,23 @@
         </div>
 
         <div class="configuracoes-conteudo">
+            <!-- MULTA -->
             <div id="multa-content" class="config-content active">
                 <h3>Configurações de Multa</h3>
                 <p>Aqui você pode definir o valor da multa por dia de atraso.</p>
-                <form id="form-multa">
+                <form id="form-multa" method="POST">
                     {% csrf_token %}
+                    <input type="hidden" name="form-action" value="salvar-multa">
                     <div class="form-group">
                         <label for="valor-multa">Valor por dia (R$):</label>
-                        <input type="number" id="valor-multa" name="valor-multa" step="0.01" value="{{ multa_por_dia }}"
-                            required>
+                        <input type="number" id="valor-multa" name="multa-por-dia" step="0.01"
+                            value="{{ multa_por_dia }}" required>
                     </div>
                     <button type="submit" class="btn">Salvar</button>
                 </form>
             </div>
 
+            <!-- CONTAS -->
             <div id="contas-content" class="config-content">
                 <h3>Contas de Login</h3>
                 <p>Visualize e gerencie as contas de login do sistema.</p>
@@ -71,20 +74,30 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for usuario in usuarios_cadastrados %}
                         <tr>
-                            <td>admin</td>
-                            <td><button class="btn-editar">Editar</button><button class="btn-excluir">Excluir</button>
+                            <td>{{ usuario.username }}</td>
+                            <td>
+                                <button class="btn-editar">Editar</button>
+                                <button class="btn-excluir">Excluir</button>
                             </td>
                         </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2">Nenhum usuário cadastrado.</td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
 
+            <!-- CADASTRO -->
             <div id="cadastro-content" class="config-content">
                 <h3>Cadastro de Nova Conta</h3>
                 <p>Crie novas contas de acesso para administradores.</p>
-                <form id="form-cadastro-conta">
+                <form id="form-cadastro-conta" method="POST">
                     {% csrf_token %}
+                    <input type="hidden" name="form-action" value="cadastro-usuario">
                     <div class="form-group">
                         <label for="username">Nome de Usuário</label>
                         <input type="text" id="username" name="username" required>

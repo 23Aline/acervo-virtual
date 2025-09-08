@@ -3,20 +3,47 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
 from django.contrib import messages
-from .models import Livro, Leitor, Emprestimo, Devolucao
+from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao
 from django.utils import timezone
 from datetime import date, datetime
 import decimal
 from django.views.decorators.http import require_POST 
+from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 
 from django.shortcuts import render, redirect
 
+
 def configuracao(request):
-    multa_por_dia = 2.50
+    if request.method == 'POST':
+        form_action = request.POST.get('form-action')
+        
+        if form_action == 'salvar-multa':
+            valor_multa_str = request.POST.get('multa-por-dia')
+            if valor_multa_str:
+                config, created = Configuracao.objects.get_or_create(pk=1)
+                config.multa_por_dia = valor_multa_str
+                config.save()
+                messages.success(request, 'Valor da multa atualizado com sucesso!')
+            return redirect('configuracao')
+        
+        elif form_action == 'cadastro-usuario':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            if username and password:
+                if User.objects.filter(username=username).exists():
+                    messages.error(request, 'Nome de usuário já existe.')
+                else:
+                    User.objects.create_user(username=username, password=password)
+                    messages.success(request, 'Usuário cadastrado com sucesso!')
+            return redirect('configuracao')
+
+    multa_por_dia = Configuracao.objects.first().multa_por_dia if Configuracao.objects.exists() else 2.50
+    usuarios_cadastrados = User.objects.all()
 
     context = {
-        'multa_por_dia': multa_por_dia
+        'multa_por_dia': multa_por_dia,
+        'usuarios_cadastrados': usuarios_cadastrados
     }
     return render(request, 'configuracao.html', context)
 

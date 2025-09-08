@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone 
+from django.contrib.auth.models import User
 
 class Livro(models.Model):
     titulo = models.CharField(max_length=200)
@@ -55,3 +56,9 @@ class Devolucao(models.Model):
 
     def __str__(self):
         return f"Devolução de {self.emprestimo.livro.titulo}"
+    
+class Configuracao(models.Model):
+    multa_por_dia = models.DecimalField(max_digits=5, decimal_places=2, default=2.50)
+
+    def __str__(self):
+        return "Configurações do Sistema"

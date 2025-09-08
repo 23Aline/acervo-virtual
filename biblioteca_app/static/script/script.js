@@ -328,11 +328,11 @@ document.addEventListener('DOMContentLoaded', function () {
         homeContent.style.display = "block";
     }
 
-        const sidebarButtons = document.querySelectorAll('.configuracoes-sidebar .btn-config');
+    const sidebarButtons = document.querySelectorAll('.configuracoes-sidebar .btn-config');
     const contentSections = document.querySelectorAll('.config-content');
 
     sidebarButtons.forEach(button => {
-        button.addEventListener('click', function(event) {
+        button.addEventListener('click', function (event) {
             event.preventDefault();
             const target = this.dataset.target;
 
@@ -340,7 +340,10 @@ document.addEventListener('DOMContentLoaded', function () {
             contentSections.forEach(section => section.classList.remove('active'));
 
             this.classList.add('active');
-            document.getElementById(target + '-content').classList.add('active');
+            const targetSection = document.getElementById(target + '-content');
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
         });
     });
 });
