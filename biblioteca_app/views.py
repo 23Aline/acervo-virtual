@@ -12,6 +12,14 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django.shortcuts import render, redirect
 
+def configuracao(request):
+    multa_por_dia = 2.50
+
+    context = {
+        'multa_por_dia': multa_por_dia
+    }
+    return render(request, 'configuracao.html', context)
+
 def home(request):
     
     query = request.GET.get('q')

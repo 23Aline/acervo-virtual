@@ -14,6 +14,7 @@ urlpatterns = [
     path('multa/', views.multa, name='multa'),
     path('estoque/', views.estoque, name='estoque'),
     path('usuarios/', views.usuarios, name='usuarios'),
+    path('configuracao/', views.configuracao, name='configuracao'),
     path('api/leitor/buscar/', views.buscar_leitor, name='buscar_leitor'),
     path('api/livro/buscar/', views.buscar_livro, name='buscar_livro'),
     path('livro/<int:livro_id>/', views.livro_detalhes, name='livro_detalhes'),

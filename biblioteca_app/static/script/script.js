@@ -327,4 +327,20 @@ document.addEventListener('DOMContentLoaded', function () {
         welcomeScreen.style.display = "none";
         homeContent.style.display = "block";
     }
+
+        const sidebarButtons = document.querySelectorAll('.configuracoes-sidebar .btn-config');
+    const contentSections = document.querySelectorAll('.config-content');
+
+    sidebarButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+            const target = this.dataset.target;
+
+            sidebarButtons.forEach(btn => btn.classList.remove('active'));
+            contentSections.forEach(section => section.classList.remove('active'));
+
+            this.classList.add('active');
+            document.getElementById(target + '-content').classList.add('active');
+        });
+    });
 });
