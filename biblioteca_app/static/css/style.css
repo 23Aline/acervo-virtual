@@ -881,7 +881,6 @@ main {
     border-radius: 8px;
 }
 
-/* TELA DE CONFIGURAÇÕES */
 .configuracoes-sidebar {
     width: 250px;
     background-color: #1C325B;
@@ -907,8 +906,8 @@ main {
     transition: background-color 0.2s;
 }
 
-.configuracoes-sidebar .btn-config.active {
-    background-color: #9b2c37;
+.configuracoes-sidebar .btn-config:hover {
+    background-color: #8693ab;
 }
 
 .configuracoes-conteudo {
@@ -920,7 +919,7 @@ main {
     display: none;
 }
 
-.config-content.active {
+.config-content:target {
     display: block;
 }
 

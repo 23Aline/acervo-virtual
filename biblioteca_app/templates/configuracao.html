@@ -40,16 +40,14 @@
 
     <main class="configuracoes-main">
         <div class="configuracoes-sidebar">
-            <a href="#" class="btn-config active" data-target="multa">Multa</a>
-            <a href="#" class="btn-config" data-target="contas">Contas</a>
-            <a href="#" class="btn-config" data-target="cadastro">Cadastro</a>
+            <a href="#multa-content" class="btn-config" data-target="multa">Multa</a>
+            <a href="#contas-content" class="btn-config" data-target="contas">Contas</a>
+            <a href="#cadastro-content" class="btn-config" data-target="cadastro">Cadastro</a>
         </div>
 
         <div class="configuracoes-conteudo">
-            <!-- MULTA -->
             <div id="multa-content" class="config-content active">
-                <h3>Configurações de Multa</h3>
-                <p>Aqui você pode definir o valor da multa por dia de atraso.</p>
+                <h3>Multa</h3>
                 <form id="form-multa" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="form-action" value="salvar-multa">
@@ -62,10 +60,8 @@
                 </form>
             </div>
 
-            <!-- CONTAS -->
             <div id="contas-content" class="config-content">
-                <h3>Contas de Login</h3>
-                <p>Visualize e gerencie as contas de login do sistema.</p>
+                <h3>Contas cadastradas no sistema:</h3>
                 <table class="tabela-config">
                     <thead>
                         <tr>
@@ -91,10 +87,8 @@
                 </table>
             </div>
 
-            <!-- CADASTRO -->
             <div id="cadastro-content" class="config-content">
-                <h3>Cadastro de Nova Conta</h3>
-                <p>Crie novas contas de acesso para administradores.</p>
+                <h3>Cadastro de nova conta:</h3>
                 <form id="form-cadastro-conta" method="POST">
                     {% csrf_token %}
                     <input type="hidden" name="form-action" value="cadastro-usuario">
