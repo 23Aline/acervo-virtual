@@ -3,15 +3,15 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
 from django.contrib import messages
-from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao
+from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao, Multa 
 from django.utils import timezone
 from datetime import date, datetime
 import decimal
 from django.views.decorators.http import require_POST 
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from datetime import date
 
-from django.shortcuts import render, redirect
 
 
 def configuracao(request):
