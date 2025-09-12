@@ -13,13 +13,6 @@
 </head>
 
 <body>
-
-    <div id="welcome-screen">
-        <img src="{% static 'img/biblioteca.png' %}" alt="Logo da Biblioteca" class="logo">
-        <h1>Bem-vindo ao Acervo Digital</h1>
-        <p>ENTRAR</p>
-    </div>
-
     <header>
         <div class="navbar">
             <a href="{% url 'home' %}" class="w3-xlarge">
@@ -42,6 +35,12 @@
             <li><a href="{% url 'estoque' %}">Estoque</a></li>
             <li><a href="{% url 'usuarios' %}">Usuários</a></li>
             <li><a href="{% url 'configuracao' %}">Configurações</a></li>
+            <li>
+                <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit">Sair</button>
+                </form>
+            </li>
         </ul>
     </nav>
 

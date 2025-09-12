@@ -310,22 +310,4 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(err => console.error(err));
     });
-
-    const welcomeScreen = document.getElementById("welcome-screen");
-    const homeContent = document.getElementById("home-content");
-
-    if (!sessionStorage.getItem("visited")) {
-        homeContent.style.display = "none";
-        welcomeScreen.style.display = "flex";
-
-        welcomeScreen.addEventListener("click", () => {
-            sessionStorage.setItem("visited", "true"); 
-            welcomeScreen.style.display = "none";    
-            homeContent.style.display = "block";     
-        });
-    } else {
-        welcomeScreen.style.display = "none";
-        homeContent.style.display = "block";
-    }
-    
 });

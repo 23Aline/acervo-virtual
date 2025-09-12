@@ -3,9 +3,12 @@ from django.urls import path
 from biblioteca_app import views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', views.login_view, name='login_view'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='login_view'), name='logout'),
     path('', views.home, name='home'),
     path('cadastro-livros/', views.cadastro_livros, name='cadastro_livros'),
     path('cadastro-leitor/', views.cadastro_leitor, name='cadastro_leitor'),

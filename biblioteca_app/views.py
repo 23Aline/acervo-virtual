@@ -11,6 +11,45 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from datetime import date
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LogoutView
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            messages.success(request, f'Bem-vindo, {user.username}!')
+            return redirect('home') 
+        else:
+            messages.error(request, 'Usuário ou senha inválidos. Tente novamente.')
+            return render(request, 'login.html')
+            
+    return render(request, 'login.html')
+
+@login_required(login_url='login_view')
+def home(request):
+    
+    query = request.GET.get('q')
+    
+    if query:
+        
+        livros = Livro.objects.filter(
+            Q(titulo__icontains=query) |
+            Q(autor__icontains=query) | 
+            Q(genero__icontains=query)  
+        ).distinct() 
+    else:
+        livros = Livro.objects.all()
+    
+    context = {
+        'livros': livros
+    }
+    return render(request, 'home.html', context)
 
 def excluir_usuario(request, user_id):
     if request.method == 'POST':
@@ -59,25 +98,6 @@ def configuracao(request):
         'usuarios_cadastrados': usuarios_cadastrados
     }
     return render(request, 'configuracao.html', context)
-
-def home(request):
-    
-    query = request.GET.get('q')
-    
-    if query:
-        
-        livros = Livro.objects.filter(
-            Q(titulo__icontains=query) |
-            Q(autor__icontains=query) | 
-            Q(genero__icontains=query)  
-        ).distinct() 
-    else:
-        livros = Livro.objects.all()
-    
-    context = {
-        'livros': livros
-    }
-    return render(request, 'home.html', context)
 
 def livro_detalhes(request, livro_id):
     livro = get_object_or_404(Livro, pk=livro_id)
