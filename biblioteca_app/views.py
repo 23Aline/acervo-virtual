@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
 from django.contrib import messages
-from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao, Multa 
+from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao 
 from django.utils import timezone
 from datetime import date, datetime
 import decimal
@@ -303,11 +303,13 @@ def devolver_livro(request, emprestimo_id):
     return redirect('reservas')
 
 def multa(request):
+    # lista apenas devoluções com multa registrada
     devolucoes_com_multa = Devolucao.objects.filter(valor_multa__gt=0).order_by('-data_devolucao_real')
     context = {
         'devolucoes': devolucoes_com_multa
     }
     return render(request, 'multa.html', context)
+
 
 def calcular_multa(request):
     emprestimo_id = request.GET.get('emprestimo_id')
@@ -316,20 +318,38 @@ def calcular_multa(request):
     try:
         emprestimo = get_object_or_404(Emprestimo, pk=emprestimo_id)
         data_entrega = datetime.strptime(data_entrega_str, '%Y-%m-%d').date()
-        
+
+        #  pega valor da multa configurado no sistema
+        config = Configuracao.objects.first()
+        valor_por_dia = config.valor_multa_dia if config else decimal.Decimal('2.50')
+
         valor_multa = decimal.Decimal('0.00')
         atraso = False
 
         if data_entrega > emprestimo.data_devolucao:
             atraso = True
             dias_atraso = (data_entrega - emprestimo.data_devolucao).days
-            valor_multa = decimal.Decimal(dias_atraso * 2.50) 
-        
-        return JsonResponse({'valor_multa': f'{valor_multa:.2f}', 'atraso': atraso})
+            valor_multa = dias_atraso * valor_por_dia
+
+        #  salva ou atualiza a devolução no banco
+        devolucao, created = Devolucao.objects.get_or_create(
+            emprestimo=emprestimo,
+            defaults={"data_devolucao_real": data_entrega, "valor_multa": valor_multa}
+        )
+        if not created:  # já existia, só atualiza
+            devolucao.data_devolucao_real = data_entrega
+            devolucao.valor_multa = valor_multa
+            devolucao.save()
+
+        return JsonResponse({
+            'valor_multa': f'{valor_multa:.2f}',
+            'atraso': atraso
+        })
+
     except Emprestimo.DoesNotExist:
         return JsonResponse({'erro': 'Empréstimo não encontrado'}, status=404)
-    except Exception:
-        return JsonResponse({'erro': 'Erro ao calcular multa.'}, status=500)
+    except Exception as e:
+        return JsonResponse({'erro': f'Erro ao calcular multa: {str(e)}'}, status=500)
 
 def buscar_leitor(request):
     cpf = request.GET.get('cpf', '').strip()

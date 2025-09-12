@@ -50,11 +50,11 @@
                 </tr>
             </thead>
             <tbody>
-                {% for multa in multas %}
+                {% for devolucao in devolucoes %}
     <tr>
-        <td>{{ multa.leitor.cpf }}</td>
-        <td>{{ multa.livro.titulo }}</td>
-        <td>R$ {{ multa.valor }}</td>
+        <td>{{ devolucao.emprestimo.leitor.cpf }}</td>
+        <td>{{ devolucao.emprestimo.livro.titulo }}</td>
+        <td>R$ {{ devolucao.valor_multa }}</td>
     </tr>
     {% empty %}
     <tr>
