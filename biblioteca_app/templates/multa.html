@@ -35,6 +35,12 @@
             <li><a href="{% url 'estoque' %}">Estoque</a></li>
             <li><a href="{% url 'usuarios' %}">Usuários</a></li>
             <li><a href="{% url 'configuracao' %}">Configurações</a></li>
+            <li>
+                <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit">Sair</button>
+                </form>
+            </li>
         </ul>
     </nav>
 
