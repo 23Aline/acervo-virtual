@@ -883,7 +883,7 @@ main {
 
 .configuracoes-sidebar {
     width: 250px;
-    background-color: #1C325B;
+    background-color: #9ABF80;
     padding: 10px;
     border-radius: 0;
     margin-top: 95px;
@@ -907,7 +907,7 @@ main {
 }
 
 .configuracoes-sidebar .btn-config:hover {
-    background-color: #8693ab;
+    background-color: #53703f;
 }
 
 .configuracoes-conteudo {
@@ -938,4 +938,19 @@ main {
 
 .tabela-config thead th {
     background-color: #ddd;
+}
+
+.btn-excluir {
+    background-color: #9b2c37;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-left: 5px;
+}
+
+.btn-excluir:hover {
+    background-color: #8693ab; 
 }

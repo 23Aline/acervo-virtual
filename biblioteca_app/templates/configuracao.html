@@ -74,8 +74,12 @@
                         <tr>
                             <td>{{ usuario.username }}</td>
                             <td>
-                                <button class="btn-editar">Editar</button>
-                                <button class="btn-excluir">Excluir</button>
+                                <form method="POST" action="{% url 'excluir_usuario' usuario.id %}"
+                                    style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-excluir">Excluir
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         {% empty %}

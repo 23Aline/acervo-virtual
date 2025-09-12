@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
 from django.contrib import messages
-from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao 
+from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao
 from django.utils import timezone
 from datetime import date, datetime
 import decimal
@@ -12,7 +12,20 @@ from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from datetime import date
 
+def excluir_usuario(request, user_id):
+    if request.method == 'POST':
+        try:
+            usuario_a_excluir = get_object_or_404(User, id=user_id)
 
+            if usuario_a_excluir == request.user:
+                messages.error(request, 'Você não pode excluir a sua própria conta.')
+            else:
+                usuario_a_excluir.delete()
+                messages.success(request, f'Usuário "{usuario_a_excluir.username}" excluído com sucesso!')
+        except Exception as e:
+            messages.error(request, f'Erro ao excluir o usuário: {e}')
+    
+    return redirect('configuracao')
 
 def configuracao(request):
     if request.method == 'POST':
@@ -467,3 +480,4 @@ def buscar_livro_completo(request):
         return JsonResponse(response_data)
     except Exception as e:
         return JsonResponse({'erro': str(e)}, status=500)
+    
