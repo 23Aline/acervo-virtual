@@ -1044,6 +1044,20 @@ main {
     width: 400px;
 }
 
+.config-logo {
+    display: flex;
+    flex-direction: column;
+    height: 80vh; 
+    align-items: center;
+    margin-left: 130px;
+    margin-top: -10px;
+}
+
+.config-logo img {
+    width: 550px;
+    height: auto;
+}
+
 /*TELA DE LOGIN*/
 body.login-page {
     margin: 0;

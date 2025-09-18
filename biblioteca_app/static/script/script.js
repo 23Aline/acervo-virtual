@@ -323,4 +323,22 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById("modal-editar").style.display = "none";
     };
 
+    const btnConfigs = document.querySelectorAll('.configuracoes-sidebar .btn-config');
+    const logo = document.getElementById('config-logo');
+    const conteudos = document.querySelectorAll('.config-content');
+
+    btnConfigs.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault(); 
+
+            logo.style.display = 'none';
+
+            conteudos.forEach(c => c.style.display = 'none');
+
+            const targetId = btn.getAttribute('href').substring(1);
+            const target = document.getElementById(targetId);
+            if (target) target.style.display = 'block';
+        });
+    });
+
 });
