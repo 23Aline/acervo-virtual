@@ -22,8 +22,8 @@
                 {% if messages %}
                 <ul class="messages">
                     {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
+                    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+                        {% endfor %}
                 </ul>
                 {% endif %}
                 <div class="form-group">
@@ -35,6 +35,9 @@
                     <input type="password" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn">Entrar</button>
+                <div class="forgot-password">
+                    <a href="{% url 'password_reset' %}">Esqueci minha senha</a>
+                </div>
             </form>
         </div>
 

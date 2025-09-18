@@ -32,6 +32,10 @@ urlpatterns = [
     path('api/livro/completo/', views.buscar_livro_completo, name='buscar_livro_completo'),
     path('reservas/devolver/<int:emprestimo_id>/', views.devolver_livro, name='devolver_livro'),
     path('configuracao/excluir-usuario/<int:user_id>/', views.excluir_usuario, name='excluir_usuario'),
+    path('reset-password/', auth_views.PasswordResetView.as_view(template_name="reset_password.html"), name="password_reset"),
+    path('reset-password-sent/', auth_views.PasswordResetDoneView.as_view(template_name="reset_password_sent.html"), name="password_reset_done"),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="reset_password_confirm.html"), name="password_reset_confirm"),
+    path('reset-password-complete/', auth_views.PasswordResetCompleteView.as_view(template_name="reset_password_complete.html"), name="password_reset_complete"),
 ]
 
 if settings.DEBUG:

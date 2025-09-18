@@ -1123,3 +1123,20 @@ body.login-page {
 ul.messages {
     display: none;
 }
+
+.forgot-password {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.forgot-password a {
+    color: #1C325B;
+    font-size: 17px;
+    text-decoration: none;
+    transition: color 0.2s;
+    text-align: center;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
