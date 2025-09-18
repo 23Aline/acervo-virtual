@@ -62,3 +62,12 @@ class Configuracao(models.Model):
 
     def __str__(self):
         return "Configurações do Sistema"
+
+class PerfilUsuario(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="perfil")
+    email = models.EmailField()
+    cpf = models.CharField(max_length=14, unique=True)  
+    endereco = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.user.username

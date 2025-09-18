@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
 from django.contrib import messages
-from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao
+from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao, PerfilUsuario
 from django.utils import timezone
 from datetime import date, datetime
 import decimal
@@ -82,12 +82,38 @@ def configuracao(request):
         elif form_action == 'cadastro-usuario':
             username = request.POST.get('username')
             password = request.POST.get('password')
-            if username and password:
+            email = request.POST.get('email')
+            cpf = request.POST.get('cpf')
+            endereco = request.POST.get('endereco')
+
+            if username and password and email and cpf and endereco:
                 if User.objects.filter(username=username).exists():
                     messages.error(request, 'Nome de usuário já existe.')
+                elif PerfilUsuario.objects.filter(cpf=cpf).exists():
+                    messages.error(request, 'CPF já cadastrado.')
                 else:
-                    User.objects.create_user(username=username, password=password)
+                    user = User.objects.create_user(username=username, password=password, email=email)
+                    PerfilUsuario.objects.create(user=user, email=email, cpf=cpf, endereco=endereco)
                     messages.success(request, 'Usuário cadastrado com sucesso!')
+            return redirect('configuracao')
+        
+        elif form_action == 'editar-usuario':
+            usuario_id = request.POST.get('usuario_id')
+            user = get_object_or_404(User, id=usuario_id)
+
+            email = request.POST.get('email')
+            cpf = request.POST.get('cpf')
+            endereco = request.POST.get('endereco')
+
+            if email and cpf and endereco:
+                user.email = email
+                user.save()
+                perfil, created = PerfilUsuario.objects.get_or_create(user=user)
+                perfil.email = email
+                perfil.cpf = cpf
+                perfil.endereco = endereco
+                perfil.save()
+                messages.success(request, 'Usuário atualizado com sucesso!')
             return redirect('configuracao')
 
     multa_por_dia = Configuracao.objects.first().multa_por_dia if Configuracao.objects.exists() else 2.50

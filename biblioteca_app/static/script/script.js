@@ -310,4 +310,17 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(err => console.error(err));
     });
+
+    window.abrirModal = function (id, email, cpf, endereco) {
+        document.getElementById("usuario_id").value = id;
+        document.getElementById("modal-email").value = email;
+        document.getElementById("modal-cpf").value = cpf;
+        document.getElementById("modal-endereco").value = endereco;
+        document.getElementById("modal-editar").style.display = "flex";
+    };
+
+    window.fecharModal = function () {
+        document.getElementById("modal-editar").style.display = "none";
+    };
+
 });
