@@ -1,3 +1,6 @@
+
+<div align="center"> <img width="300" height="300" alt="biblioteca2" src="https://github.com/user-attachments/assets/445323bb-ec6f-4411-b8f4-151b84937d93" /> </div>
+
 #  Acervo Virtual
 
 Este é o projeto do sistema Acervo Digital para o Projeto Aplicado III, desenvolvido em Django.
