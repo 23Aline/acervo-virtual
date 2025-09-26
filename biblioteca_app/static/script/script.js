@@ -1,10 +1,33 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    document.querySelectorAll('.has-submenu > a').forEach(item => {
-        item.addEventListener('click', function (e) {
-            e.preventDefault();
-            const parent = this.parentElement;
-            parent.classList.toggle('open');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const body = document.body;
+
+    if (menuToggle) {
+        menuToggle.addEventListener('click', function () {
+            body.classList.toggle('menu-open');
+        });
+    }
+
+    const hasSubmenuItems = document.querySelectorAll('.has-submenu > a');
+
+    hasSubmenuItems.forEach(item => {
+        item.addEventListener('click', function (event) {
+
+            if (window.innerWidth <= 768) {
+                event.preventDefault();
+            }
+
+            const parentLi = this.parentElement;
+
+            parentLi.classList.toggle('open');
+
+            const allHasSubmenus = document.querySelectorAll('.has-submenu');
+            allHasSubmenus.forEach(otherItem => {
+                if (otherItem !== parentLi && otherItem.classList.contains('open')) {
+                    otherItem.classList.remove('open');
+                }
+            });
         });
     });
 

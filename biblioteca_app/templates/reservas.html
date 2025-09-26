@@ -19,6 +19,9 @@
                 <img src="{% static 'img/biblioteca.png' %}" alt="Logo Acervo Digital" class="logo">
                 Acervo Digital
             </a>
+            <button class="menu-toggle" aria-label="Abrir Menu">
+                <i class="fa fa-bars"></i>
+            </button>
         </div>
     </header>
 
@@ -38,7 +41,7 @@
                 <ul class="submenu">
                     <li><a href="{% url 'cadastro_leitor' %}">Cadastro de Leitor</a></li>
                     <li><a href="{% url 'reservas' %}">Reservas</a></li>
-                    <li><a href="{% url 'usuarios' %}">Usuários</a></li>
+                    <li><a href="{% url 'usuarios' %}">Leitores</a></li>
                 </ul>
             </li>
 
