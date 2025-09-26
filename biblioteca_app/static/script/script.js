@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', function () {
 
-    function toggleMenu() {
-        const menu = document.getElementById('side-menu');
-        if (menu) menu.classList.toggle('active');
-    }
-    window.toggleMenu = toggleMenu;
+    document.querySelectorAll('.has-submenu > a').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const parent = this.parentElement;
+            parent.classList.toggle('open');
+        });
+    });
 
     const urlEmprestimo = window.urlEmprestimo || '/';
 
@@ -329,7 +331,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     btnConfigs.forEach(btn => {
         btn.addEventListener('click', (e) => {
-            e.preventDefault(); 
+            e.preventDefault();
 
             logo.style.display = 'none';
 

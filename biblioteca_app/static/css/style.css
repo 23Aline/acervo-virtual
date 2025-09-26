@@ -30,71 +30,72 @@
 .side-menu {
     position: fixed;
     top: 0;
-    right: -250px;
+    right: 0; /* agora fixo, sempre visível */
     width: 250px;
     height: 100%;
     background-color: #9ABF80;
     color: white;
-    transition: right 0.3s ease;
     z-index: 1000;
     padding-top: 100px;
     text-align: center;
 }
 
-.side-menu.active {
-    right: 0;
-}
-
 .side-menu ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .side-menu li {
-    padding: 15px 40px;
+    padding: 10px 20px;
+    position: relative;
 }
 
+.side-menu a,
 .side-menu li button {
-    background: none; 
-    border: none; 
-    padding: 0;
-    margin: 0;
-    text-align: center;
-    cursor: pointer; 
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
+    display: block;
     width: 100%;
-    box-sizing: border-box; 
-}
-
-.side-menu li form:hover button {
-    background-color: #53703f;
-    display: block;
-}
-
-.side-menu a {
+    padding: 12px 15px;
     color: white;
     text-decoration: none;
     font-size: 18px;
-}
-
-.side-menu a:hover {
-    background-color: #53703f;
-    display: block;
-}
-
-.menu-toggle {
     background: none;
     border: none;
-    color: white;
-    font-size: 28px;
     cursor: pointer;
-    margin-right: 20px;
+    text-align: center;
+    box-sizing: border-box;
 }
 
-.menu-toggle:focus {
-    outline: none;
+.side-menu a:hover,
+.side-menu li button:hover {
+    background-color: #53703f;
+}
+
+/* Submenu */
+.submenu {
+    display: none;
+    background-color: #7fa46d; /* tom mais escuro para destacar */
+    padding: 0;
+    margin: 0;
+}
+
+.submenu li {
+    padding: 5px 10px;
+}
+
+.submenu li a {
+    font-size: 16px;
+    padding: 8px 15px;
+    text-align: left; /* alinhamento mais natural para subitens */
+}
+
+.submenu li a:hover {
+    background-color: #4b6339;
+}
+
+/* Submenu ativo (quando o pai tem classe .open) */
+.has-submenu.open > .submenu {
+    display: block;
 }
 
 main {

@@ -19,22 +19,46 @@
                 <img src="{% static 'img/biblioteca.png' %}" alt="Logo Acervo Digital" class="logo">
                 Acervo Digital
             </a>
-            <button class="menu-toggle" onclick="toggleMenu()">
-                <i class="fa fa-bars"></i>
-            </button>
         </div>
-
     </header>
+
     <nav id="side-menu" class="side-menu">
         <ul>
-            <li><a href="{% url 'cadastro_livros' %}">Cadastro de Livros</a></li>
-            <li><a href="{% url 'cadastro_leitor' %}">Cadastro de Leitor</a></li>
-            <li><a href="{% url 'emprestimo' %}">Empréstimo</a></li>
-            <li><a href="{% url 'reservas' %}">Reservas</a></li>
-            <li><a href="{% url 'multa' %}">Multa</a></li>
-            <li><a href="{% url 'estoque' %}">Estoque</a></li>
-            <li><a href="{% url 'usuarios' %}">Usuários</a></li>
-            <li><a href="{% url 'configuracao' %}">Configurações</a></li>
+            <li class="has-submenu">
+                <a href="#">Livros</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'cadastro_livros' %}">Cadastro de Livros</a></li>
+                    <li><a href="{% url 'estoque' %}">Estoque</a></li>
+                    <li><a href="{% url 'emprestimo' %}">Empréstimos</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <a href="#"> Leitores</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'cadastro_leitor' %}">Cadastro de Leitor</a></li>
+                    <li><a href="{% url 'reservas' %}">Reservas</a></li>
+                    <li><a href="{% url 'usuarios' %}">Usuários</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <a href="#">Relatórios</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'multa' %}">Relatório de Multas</a></li>
+                    <li><a href="{% url 'emprestimo' %}">Relatório de Empréstimos</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <a href="#">Configurações</a>
+                <ul class="submenu">
+                    <li><a href="#multa-content">Multa</a></li>
+                    <li><a href="#contas-content">Contas</a></li>
+                    <li><a href="#cadastro-content">Cadastro</a></li>
+                </ul>
+            </li>
+
             <li>
                 <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
                     {% csrf_token %}
