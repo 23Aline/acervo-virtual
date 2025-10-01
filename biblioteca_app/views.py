@@ -7,6 +7,7 @@ from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao, PerfilUs
 from django.utils import timezone
 from datetime import date, datetime
 import decimal
+import datetime
 from django.views.decorators.http import require_POST 
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
@@ -324,91 +325,98 @@ def emprestimo_com_livro(request, livro_id):
     }
     return render(request, 'emprestimo.html', context)
 
+from datetime import date
+import decimal
+
 def reservas(request):
     emprestimos_ativos = Emprestimo.objects.filter(devolucao__isnull=True).order_by('data_devolucao')
     hoje = date.today()
 
+    config = Configuracao.objects.first()
+    valor_por_dia = config.multa_por_dia if config else decimal.Decimal('2.50')
+
     for emprestimo in emprestimos_ativos:
         emprestimo.atrasado = emprestimo.data_devolucao < hoje
+        if emprestimo.atrasado:
+            dias_atraso = (hoje - emprestimo.data_devolucao).days
+            emprestimo.valor_multa = f"{(dias_atraso * valor_por_dia):.2f}"
+        else:
+            emprestimo.valor_multa = "0.00"
 
     context = {
         'emprestimos': emprestimos_ativos
     }
     return render(request, 'reservas.html', context)
 
-def devolver_livro(request, emprestimo_id):
-    emprestimo = get_object_or_404(Emprestimo, pk=emprestimo_id)
-    if request.method == 'POST':
-        data_entrega = date.fromisoformat(request.POST.get('data_entrega'))
-        valor_multa_str = request.POST.get('valor_multa', '0.00')
-
-        try:
-            valor_multa = decimal.Decimal(valor_multa_str)
-        except decimal.InvalidOperation:
-            valor_multa = decimal.Decimal('0.00')
-
-        Devolucao.objects.create(
-            emprestimo=emprestimo,
-            data_devolucao_real=data_entrega,
-            valor_multa=valor_multa
-        )
-        
-        messages.success(request, f'Devolução do livro "{emprestimo.livro.titulo}" registrada.')
-
-        if valor_multa > 0:
-            return redirect('multa')
-        else:
-            return redirect('reservas')
-    return redirect('reservas')
-
-def multa(request):
-    # lista apenas devoluções com multa registrada
-    devolucoes_com_multa = Devolucao.objects.filter(valor_multa__gt=0).order_by('-data_devolucao_real')
-    context = {
-        'devolucoes': devolucoes_com_multa
-    }
-    return render(request, 'multa.html', context)
-
-
 def calcular_multa(request):
     emprestimo_id = request.GET.get('emprestimo_id')
-    data_entrega_str = request.GET.get('data_entrega')
+    data_entrega_str = request.GET.get('data_entrega') 
 
     try:
         emprestimo = get_object_or_404(Emprestimo, pk=emprestimo_id)
-        data_entrega = datetime.strptime(data_entrega_str, '%Y-%m-%d').date()
-
-        #  pega valor da multa configurado no sistema
+        if data_entrega_str:
+            data_entrega = datetime.datetime.strptime(data_entrega_str, '%Y-%m-%d').date()
+        else:
+            data_entrega = datetime.date.today() 
+        
         config = Configuracao.objects.first()
-        valor_por_dia = config.valor_multa_dia if config else decimal.Decimal('2.50')
-
+        valor_por_dia = config.multa_por_dia if config else decimal.Decimal('2.50')
         valor_multa = decimal.Decimal('0.00')
         atraso = False
-
+        
         if data_entrega > emprestimo.data_devolucao:
             atraso = True
             dias_atraso = (data_entrega - emprestimo.data_devolucao).days
             valor_multa = dias_atraso * valor_por_dia
 
-        #  salva ou atualiza a devolução no banco
-        devolucao, created = Devolucao.objects.get_or_create(
-            emprestimo=emprestimo,
-            defaults={"data_devolucao_real": data_entrega, "valor_multa": valor_multa}
-        )
-        if not created:  # já existia, só atualiza
-            devolucao.data_devolucao_real = data_entrega
-            devolucao.valor_multa = valor_multa
-            devolucao.save()
-
         return JsonResponse({
             'valor_multa': f'{valor_multa:.2f}',
             'atraso': atraso
         })
-
-    except Emprestimo.DoesNotExist:
-        return JsonResponse({'erro': 'Empréstimo não encontrado'}, status=404)
     except Exception as e:
-        return JsonResponse({'erro': f'Erro ao calcular multa: {str(e)}'}, status=500)
+        return JsonResponse({'erro': str(e)}, status=500)
+
+def devolver_livro(request, emprestimo_id):
+    emprestimo = get_object_or_404(Emprestimo, pk=emprestimo_id)
+
+    if request.method == 'POST':
+        data_entrega = datetime.date.fromisoformat(request.POST.get('data_entrega'))
+        valor_multa = decimal.Decimal(request.POST.get('valor_multa', '0.00'))
+
+        devolucao = Devolucao.objects.create(
+            emprestimo=emprestimo,
+            data_devolucao_real=data_entrega,
+            valor_multa=valor_multa
+        )
+
+        messages.success(request, f'Devolução do livro "{emprestimo.livro.titulo}" registrada. Multa: R$ {valor_multa:.2f}')
+
+        return redirect('reservas')
+
+    return redirect('reservas')
+
+def multa(request):
+    config = Configuracao.objects.first()
+    valor_por_dia = config.multa_por_dia if config else decimal.Decimal('2.50')
+
+    devolucoes_com_multa = []
+
+    hoje = datetime.date.today()
+
+    emprestimos_atrasados = Emprestimo.objects.filter(data_devolucao__lt=hoje, devolucao__isnull=True)
+
+    for emprestimo in emprestimos_atrasados:
+        dias_atraso = (hoje - emprestimo.data_devolucao).days
+        valor_multa_temp = dias_atraso * valor_por_dia
+
+        emprestimo.valor_multa_temp = valor_multa_temp
+        devolucoes_com_multa.append(emprestimo)
+
+    context = {
+        'devolucoes': devolucoes_com_multa
+    }
+
+    return render(request, 'multa.html', context)
 
 def buscar_leitor(request):
     cpf = request.GET.get('cpf', '').strip()

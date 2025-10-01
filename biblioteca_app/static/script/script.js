@@ -259,30 +259,56 @@ document.addEventListener('DOMContentLoaded', function () {
             modalEdicaoLivro.style.display = "none";
         }
     });
-
     const btnsDevolucao = document.querySelectorAll(".btn-devolucao");
     const modalDevolucao = document.getElementById("modal-devolucao");
     const fecharModalDevolucao = modalDevolucao?.querySelector(".fechar-modal");
     const btnVoltarDevolucao = modalDevolucao?.querySelector(".btn-voltar-modal");
 
+    const dataEntregaInput = document.getElementById("data-entrega");
+    const valorMultaP = document.getElementById("valor-multa");
+    const valorMultaHidden = document.getElementById("valor-multa-hidden");
+    const atrasadoP = document.getElementById("atrasado-devolucao");
+    const btnPago = document.getElementById("btn-pago");
+    const formDevolucao = document.getElementById("form-devolucao");
+    const emprestimoIdInput = document.getElementById("emprestimo-id");
+
+    function formatarData(dataStr) {
+        if (!dataStr) return '';
+        try {
+            const [ano, mes, dia] = dataStr.split('-');
+            return `${dia}/${mes}/${ano}`;
+        } catch (e) {
+            console.error("Erro ao formatar a data:", e);
+            return dataStr;
+        }
+    }
+
     btnsDevolucao.forEach(btn => {
         btn.addEventListener("click", () => {
             const tr = btn.closest("tr");
-            const emprestimoId = btn.dataset.emprestimoId;
 
-            document.getElementById("emprestimo-id").value = emprestimoId;
-            document.getElementById("titulo-devolucao").textContent = tr.children[0].textContent;
-            document.getElementById("leitor-devolucao").textContent = tr.children[1].textContent;
-            document.getElementById("data-emprestimo-devolucao").textContent = tr.dataset.emprestimoData;
-            document.getElementById("data-devolucao-prevista").textContent = tr.children[2].textContent;
-            document.getElementById("atrasado-devolucao").textContent = tr.children[3].textContent;
+            const emprestimoId = tr.dataset.emprestimoId;
+            const titulo = tr.children[0].textContent;
+            const leitor = tr.children[1].textContent;
+            const dataEmprestimo = formatarData(tr.dataset.emprestimoData);
+            const dataDevolucaoPrevista = formatarData(tr.dataset.emprestimoDevolucao);
 
-            const form = document.getElementById("form-devolucao");
-            form.action = `/reservas/devolver/${emprestimoId}/`;
+            const atrasado = tr.dataset.emprestimoAtrasado === "1" ? "Sim" : "Não";
+            const valorMulta = tr.dataset.emprestimoMulta || "0.00";
 
-            document.getElementById("data-entrega").value = "";
-            document.getElementById("valor-multa").textContent = "0.00";
-            document.getElementById("valor-multa-hidden").value = "0.00";
+            emprestimoIdInput.value = emprestimoId;
+            document.getElementById("titulo-devolucao").textContent = titulo;
+            document.getElementById("leitor-devolucao").textContent = leitor;
+            document.getElementById("data-emprestimo-devolucao").textContent = dataEmprestimo;
+            document.getElementById("data-devolucao-prevista").textContent = dataDevolucaoPrevista;
+            atrasadoP.textContent = atrasado;
+            valorMultaP.textContent = valorMulta;
+            valorMultaHidden.value = valorMulta;
+
+            const hoje = new Date().toISOString().substring(0, 10);
+            dataEntregaInput.value = hoje;
+
+            formDevolucao.action = `/reservas/devolver/${emprestimoId}/`;
 
             modalDevolucao.style.display = "block";
         });
@@ -300,37 +326,26 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    const dataEntregaInput = document.getElementById("data-entrega");
-    dataEntregaInput?.addEventListener("change", () => {
-        const emprestimoId = document.getElementById("emprestimo-id").value;
-        const dataEntrega = dataEntregaInput.value;
-
-        if (emprestimoId && dataEntrega) {
-            fetch(`/calcular_multa/?emprestimo_id=${emprestimoId}&data_entrega=${dataEntrega}`)
-                .then(res => res.json())
-                .then(data => {
-                    if (!data.erro) {
-                        document.getElementById("valor-multa").textContent = data.valor_multa;
-                        document.getElementById("valor-multa-hidden").value = data.valor_multa;
-                        document.getElementById("atrasado-devolucao").textContent = data.atraso ? "Sim" : "Não";
-                    }
-                });
-        }
+    btnPago?.addEventListener("click", () => {
+        valorMultaHidden.value = "0.00";
+        valorMultaP.textContent = "0.00";
     });
 
-    const formDevolucao = document.getElementById("form-devolucao");
     formDevolucao?.addEventListener("submit", (e) => {
         e.preventDefault();
 
         const formData = new FormData(formDevolucao);
+
         fetch(formDevolucao.action, {
             method: 'POST',
             body: formData
         })
             .then(res => {
                 if (res.redirected) {
-                    alert("Devolução concluída!");
                     window.location.href = res.url;
+                } else {
+                    alert("Devolução concluída!");
+                    modalDevolucao.style.display = "none";
                 }
             })
             .catch(err => console.error(err));
@@ -347,23 +362,5 @@ document.addEventListener('DOMContentLoaded', function () {
     window.fecharModal = function () {
         document.getElementById("modal-editar").style.display = "none";
     };
-
-    const btnConfigs = document.querySelectorAll('.configuracoes-sidebar .btn-config');
-    const logo = document.getElementById('config-logo');
-    const conteudos = document.querySelectorAll('.config-content');
-
-    btnConfigs.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-
-            logo.style.display = 'none';
-
-            conteudos.forEach(c => c.style.display = 'none');
-
-            const targetId = btn.getAttribute('href').substring(1);
-            const target = document.getElementById(targetId);
-            if (target) target.style.display = 'block';
-        });
-    });
 
 });

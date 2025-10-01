@@ -87,11 +87,14 @@
                 <tbody>
                     {% for emprestimo in emprestimos %}
                     <tr data-emprestimo-id="{{ emprestimo.id }}"
-                        data-emprestimo-data="{{ emprestimo.data_emprestimo|date:'Y-m-d' }}">
+                        data-emprestimo-data="{{ emprestimo.data_emprestimo|date:'Y-m-d' }}"
+                        data-emprestimo-devolucao="{{ emprestimo.data_devolucao|date:'Y-m-d' }}"
+                        data-emprestimo-atrasado="{% if emprestimo.atrasado %}1{% else %}0{% endif %}"
+                        data-emprestimo-multa="{{ emprestimo.valor_multa|default:" 0.00" }}">
                         <td>{{ emprestimo.livro.titulo }}</td>
                         <td>{{ emprestimo.leitor.nome }}</td>
                         <td>{{ emprestimo.data_devolucao|date:"d/m/Y" }}</td>
-                        <td>{% if emprestimo.atrasado %} Sim {% else %} Não {% endif %}</td>
+                        <td>{% if emprestimo.atrasado %}Sim{% else %}Não{% endif %}</td>
                         <td class="botoes-acao">
                             <button class="btn-devolucao" data-emprestimo-id="{{ emprestimo.id }}">Devolução</button>
                         </td>
@@ -105,7 +108,7 @@
             <div class="modal-conteudo">
                 <span class="fechar-modal">&times;</span>
                 <h3>Devolução</h3>
-                <form id="form-devolucao" method="post" action="">
+                <form id="form-devolucao" method="post" action="{% url 'devolver_livro' 0 %}">
                     {% csrf_token %}
                     <input type="hidden" id="emprestimo-id" name="emprestimo_id">
                     <div class="form-group">
@@ -121,7 +124,7 @@
                         <p id="data-emprestimo-devolucao" class="info-adicional"></p>
                     </div>
                     <div class="form-group">
-                        <label>Data de devolução:</label>
+                        <label>Data de devolução prevista:</label>
                         <p id="data-devolucao-prevista" class="info-adicional"></p>
                     </div>
                     <div class="form-group">
@@ -136,6 +139,7 @@
                         <label>Valor da Multa:</label>
                         <p id="valor-multa" class="info-adicional"></p>
                         <input type="hidden" id="valor-multa-hidden" name="valor_multa">
+                        <button type="button" id="btn-pago">Pago</button>
                     </div>
                     <div class="modal-botoes">
                         <button type="submit" class="btn btn-confirmar-modal">Confirmar</button>

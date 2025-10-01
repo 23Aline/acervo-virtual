@@ -73,32 +73,35 @@
 
     <main>
         <div class="estoque-container">
-            <h2>Multa</h2>
+            <h2>Relatório de multas</h2>
             <table class="tabela-multa">
                 <thead>
                     <tr>
-                        <th>CPF</th>
+                        <th>Nome</th>
                         <th>Livro</th>
-                        <th>Multa</th>
+                        <th>Multa (R$)</th>
+                        <th>Situação</th>
+                        <th>Condição</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for devolucao in devolucoes %}
+                    {% for emprestimo in devolucoes %}
                     <tr>
-                        <td>{{ devolucao.emprestimo.leitor.cpf }}</td>
-                        <td>{{ devolucao.emprestimo.livro.titulo }}</td>
-                        <td>R$ {{ devolucao.valor_multa }}</td>
+                        <td>{{ emprestimo.leitor.nome }}</td>
+                        <td>{{ emprestimo.livro.titulo }}</td>
+                        <td>{{ emprestimo.valor_multa_temp|floatformat:2 }}</td>
+                        <td>Emprestado</td>
+                        <td>Atrasado</td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="3">Nenhuma multa registrada.</td>
+                        <td colspan="5">Nenhuma multa registrada.</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </main>
-
 
     <script src="{% static 'script/script.js' %}"></script>
 </body>

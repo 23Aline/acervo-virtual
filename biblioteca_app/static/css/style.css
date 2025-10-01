@@ -826,7 +826,22 @@ main {
     cursor: pointer;
 }
 
-/* Tela Multa */
+#btn-pago {
+    background-color: #7fa46d; 
+    color: #fff; 
+    border: none; 
+    border-radius: 5px;
+    padding: 8px 16px; 
+    font-size: 17px; 
+    cursor: pointer; 
+    transition: background-color 0.3s ease;
+}
+
+#btn-pago:hover {
+    background-color: #4b6339; 
+}
+
+/* Tela RELATORIO Multa */
 .tabela-multa {
     width: 100%;
     border-collapse: collapse;
