@@ -71,7 +71,8 @@
         </ul>
     </nav>
 
-    <main>
+    <main class="configuracoes-main">
+        <div class="configuracoes-conteudo">
         <h3>Configuração de Multa</h3>
         <form method="POST">
             {% csrf_token %}
@@ -83,6 +84,7 @@
             </div>
             <button type="submit" class="btn">Salvar</button>
         </form>
+        </div>
     </main>
 
     <script src="{% static 'script/script.js' %}"></script>

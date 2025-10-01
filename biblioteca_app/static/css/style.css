@@ -856,35 +856,7 @@ main {
     max-width: 1000px;
     margin: 10px auto;
     border-radius: 8px;
-}
-
-.configuracoes-sidebar {
-    width: 250px;
-    background-color: #9ABF80;
-    padding: 10px;
-    border-radius: 0;
-    margin-top: 95px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 900;
-}
-
-.configuracoes-sidebar .btn-config {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-    padding: 10px 15px;
-    border-radius: 4px;
-    transition: background-color 0.2s;
-}
-
-.configuracoes-sidebar .btn-config:hover {
-    background-color: #53703f;
+    margin-left: 150px;
 }
 
 .configuracoes-conteudo {

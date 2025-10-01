@@ -71,34 +71,36 @@
         </ul>
     </nav>
 
-    <main>
-        <h3>Cadastro de nova conta</h3>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="form-action" value="cadastro-usuario">
+    <main class="configuracoes-main">
+        <div class="configuracoes-conteudo">
+            <h3>Cadastro de nova conta</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="form-action" value="cadastro-usuario">
 
-            <div class="form-group">
-                <label for="username">Nome de Usuário</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Senha</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <div class="form-group">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="cpf">CPF</label>
-                <input type="text" id="cpf" name="cpf" required>
-            </div>
-            <div class="form-group">
-                <label for="endereco">Endereço</label>
-                <input type="text" id="endereco" name="endereco" required>
-            </div>
-            <button type="submit" class="btn">Cadastrar</button>
-        </form>
+                <div class="form-group">
+                    <label for="username">Nome de Usuário</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="cpf">CPF</label>
+                    <input type="text" id="cpf" name="cpf" required>
+                </div>
+                <div class="form-group">
+                    <label for="endereco">Endereço</label>
+                    <input type="text" id="endereco" name="endereco" required>
+                </div>
+                <button type="submit" class="btn">Cadastrar</button>
+            </form>
+        </div>
     </main>
 
     <script src="{% static 'script/script.js' %}"></script>

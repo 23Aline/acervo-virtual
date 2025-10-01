@@ -71,37 +71,39 @@
         </ul>
     </nav>
 
-    <main>
-        <h3>Contas cadastradas no sistema</h3>
-        <table class="tabela-config">
-            <thead>
-                <tr>
-                    <th>Nome de Usuário</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios_cadastrados %}
-                <tr>
-                    <td>{{ usuario.username }}</td>
-                    <td>
-                        <form method="POST" action="{% url 'excluir_usuario' usuario.id %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn-excluir">Excluir</button>
-                        </form>
-                        <button type="button" class="btn-editar"
-                            onclick="abrirModal('{{ usuario.id }}', '{{ usuario.email }}', '{{ usuario.perfil.cpf|default:'' }}', '{{ usuario.perfil.endereco|default:'' }}')">
-                            Editar
-                        </button>
-                    </td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="2">Nenhum usuário cadastrado.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <main class="configuracoes-main">
+        <div class="configuracoes-conteudo">
+            <h3>Contas cadastradas no sistema</h3>
+            <table class="tabela-config">
+                <thead>
+                    <tr>
+                        <th>Nome de Usuário</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios_cadastrados %}
+                    <tr>
+                        <td>{{ usuario.username }}</td>
+                        <td>
+                            <form method="POST" action="{% url 'excluir_usuario' usuario.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-excluir">Excluir</button>
+                            </form>
+                            <button type="button" class="btn-editar"
+                                onclick="abrirModal('{{ usuario.id }}', '{{ usuario.email }}', '{{ usuario.perfil.cpf|default:'' }}', '{{ usuario.perfil.endereco|default:'' }}')">
+                                Editar
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="2">Nenhum usuário cadastrado.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </main>
 
     <div id="modal-editar" class="modal" style="display:none;">

@@ -549,32 +549,17 @@
 
 /*TELA DE CONFIGURAÇÕES*/
 @media (max-width: 768px) {
-    .configuracoes-sidebar {
-        width: 100%;
-        height: 40%;
-        position: static;
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        margin-top: -120px;
-        padding: 5px 0;
-        border-radius: 0;
-        background-color: #1C325B;
-    }
-
     .configuracoes-conteudo {
         flex-grow: 1;
-        padding: 15px;
-        margin-top: 0;
+        padding: 0;
+        margin-top: 20px;
+        margin-left: -130px;
+        margin-right: 20px;
+        align-items: center;
     }
 
     .configuracoes-main {
         flex-direction: column;
-    }
-
-    .configuracoes-conteudo {
-        padding: 15px;
-        margin-top: 20px;
     }
 
     .configuracoes-sidebar .btn-config {
