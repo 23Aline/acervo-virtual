@@ -1,15 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acervo Digital</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         crossorigin="anonymous" />
-    <title>Multa</title>
 </head>
 
 <body>
@@ -72,33 +72,63 @@
     </nav>
 
     <main>
-        <div class="estoque-container">
-            <h2>Multa</h2>
-            <table class="tabela-multa">
-                <thead>
-                    <tr>
-                        <th>CPF</th>
-                        <th>Livro</th>
-                        <th>Multa</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for devolucao in devolucoes %}
-                    <tr>
-                        <td>{{ devolucao.emprestimo.leitor.cpf }}</td>
-                        <td>{{ devolucao.emprestimo.livro.titulo }}</td>
-                        <td>R$ {{ devolucao.valor_multa }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3">Nenhuma multa registrada.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <h3>Contas cadastradas no sistema</h3>
+        <table class="tabela-config">
+            <thead>
+                <tr>
+                    <th>Nome de Usuário</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios_cadastrados %}
+                <tr>
+                    <td>{{ usuario.username }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'excluir_usuario' usuario.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-excluir">Excluir</button>
+                        </form>
+                        <button type="button" class="btn-editar"
+                            onclick="abrirModal('{{ usuario.id }}', '{{ usuario.email }}', '{{ usuario.perfil.cpf|default:'' }}', '{{ usuario.perfil.endereco|default:'' }}')">
+                            Editar
+                        </button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="2">Nenhum usuário cadastrado.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </main>
 
+    <div id="modal-editar" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h3>Editar Usuário</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="form-action" value="editar-usuario">
+                <input type="hidden" id="usuario_id" name="usuario_id">
+
+                <div class="form-group">
+                    <label for="modal-email">E-mail</label>
+                    <input type="email" id="modal-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-cpf">CPF</label>
+                    <input type="text" id="modal-cpf" name="cpf" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-endereco">Endereço</label>
+                    <input type="text" id="modal-endereco" name="endereco" required>
+                </div>
+                <button type="submit" class="btn-alteracoes">Salvar Alterações</button>
+                <button type="button" onclick="fecharModal()" class="btn-cancelar">Cancelar</button>
+            </form>
+        </div>
+    </div>
 
     <script src="{% static 'script/script.js' %}"></script>
 </body>

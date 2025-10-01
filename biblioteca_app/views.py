@@ -66,64 +66,64 @@ def excluir_usuario(request, user_id):
     
     return redirect('configuracao')
 
-def configuracao(request):
-    if request.method == 'POST':
-        form_action = request.POST.get('form-action')
-        
-        if form_action == 'salvar-multa':
-            valor_multa_str = request.POST.get('multa-por-dia')
-            if valor_multa_str:
-                config, created = Configuracao.objects.get_or_create(pk=1)
-                config.multa_por_dia = valor_multa_str
-                config.save()
-                messages.success(request, 'Valor da multa atualizado com sucesso!')
-            return redirect('configuracao')
-        
-        elif form_action == 'cadastro-usuario':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            email = request.POST.get('email')
-            cpf = request.POST.get('cpf')
-            endereco = request.POST.get('endereco')
-
-            if username and password and email and cpf and endereco:
-                if User.objects.filter(username=username).exists():
-                    messages.error(request, 'Nome de usuário já existe.')
-                elif PerfilUsuario.objects.filter(cpf=cpf).exists():
-                    messages.error(request, 'CPF já cadastrado.')
-                else:
-                    user = User.objects.create_user(username=username, password=password, email=email)
-                    PerfilUsuario.objects.create(user=user, email=email, cpf=cpf, endereco=endereco)
-                    messages.success(request, 'Usuário cadastrado com sucesso!')
-            return redirect('configuracao')
-        
-        elif form_action == 'editar-usuario':
-            usuario_id = request.POST.get('usuario_id')
-            user = get_object_or_404(User, id=usuario_id)
-
-            email = request.POST.get('email')
-            cpf = request.POST.get('cpf')
-            endereco = request.POST.get('endereco')
-
-            if email and cpf and endereco:
-                user.email = email
-                user.save()
-                perfil, created = PerfilUsuario.objects.get_or_create(user=user)
-                perfil.email = email
-                perfil.cpf = cpf
-                perfil.endereco = endereco
-                perfil.save()
-                messages.success(request, 'Usuário atualizado com sucesso!')
-            return redirect('configuracao')
+def configuracao_multa(request):
+    if request.method == 'POST' and request.POST.get('form-action') == 'salvar-multa':
+        valor_multa_str = request.POST.get('multa-por-dia')
+        if valor_multa_str:
+            config, created = Configuracao.objects.get_or_create(pk=1)
+            config.multa_por_dia = valor_multa_str
+            config.save()
+            messages.success(request, 'Valor da multa atualizado com sucesso!')
+        return redirect('configuracao_multa')
 
     multa_por_dia = Configuracao.objects.first().multa_por_dia if Configuracao.objects.exists() else 2.50
-    usuarios_cadastrados = User.objects.all()
+    return render(request, 'valor_multa.html', {'multa_por_dia': multa_por_dia})
 
-    context = {
-        'multa_por_dia': multa_por_dia,
-        'usuarios_cadastrados': usuarios_cadastrados
-    }
-    return render(request, 'configuracao.html', context)
+
+def configuracao_contas(request):
+    if request.method == 'POST' and request.POST.get('form-action') == 'editar-usuario':
+        usuario_id = request.POST.get('usuario_id')
+        user = get_object_or_404(User, id=usuario_id)
+
+        email = request.POST.get('email')
+        cpf = request.POST.get('cpf')
+        endereco = request.POST.get('endereco')
+
+        if email and cpf and endereco:
+            user.email = email
+            user.save()
+            perfil, created = PerfilUsuario.objects.get_or_create(user=user)
+            perfil.email = email
+            perfil.cpf = cpf
+            perfil.endereco = endereco
+            perfil.save()
+            messages.success(request, 'Usuário atualizado com sucesso!')
+        return redirect('configuracao_contas')
+
+    usuarios_cadastrados = User.objects.all()
+    return render(request, 'contas.html', {'usuarios_cadastrados': usuarios_cadastrados})
+
+
+def configuracao_cadastro(request):
+    if request.method == 'POST' and request.POST.get('form-action') == 'cadastro-usuario':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        email = request.POST.get('email')
+        cpf = request.POST.get('cpf')
+        endereco = request.POST.get('endereco')
+
+        if username and password and email and cpf and endereco:
+            if User.objects.filter(username=username).exists():
+                messages.error(request, 'Nome de usuário já existe.')
+            elif PerfilUsuario.objects.filter(cpf=cpf).exists():
+                messages.error(request, 'CPF já cadastrado.')
+            else:
+                user = User.objects.create_user(username=username, password=password, email=email)
+                PerfilUsuario.objects.create(user=user, email=email, cpf=cpf, endereco=endereco)
+                messages.success(request, 'Usuário cadastrado com sucesso!')
+        return redirect('configuracao_cadastro')
+
+    return render(request, 'cadastro.html')
 
 def livro_detalhes(request, livro_id):
     livro = get_object_or_404(Livro, pk=livro_id)

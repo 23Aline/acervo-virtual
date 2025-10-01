@@ -1,15 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acervo Digital</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         crossorigin="anonymous" />
-    <title>Multa</title>
 </head>
 
 <body>
@@ -72,33 +72,18 @@
     </nav>
 
     <main>
-        <div class="estoque-container">
-            <h2>Multa</h2>
-            <table class="tabela-multa">
-                <thead>
-                    <tr>
-                        <th>CPF</th>
-                        <th>Livro</th>
-                        <th>Multa</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for devolucao in devolucoes %}
-                    <tr>
-                        <td>{{ devolucao.emprestimo.leitor.cpf }}</td>
-                        <td>{{ devolucao.emprestimo.livro.titulo }}</td>
-                        <td>R$ {{ devolucao.valor_multa }}</td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3">Nenhuma multa registrada.</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+        <h3>Configuração de Multa</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="form-action" value="salvar-multa">
+            <div class="form-group">
+                <label for="valor-multa">Valor por dia (R$):</label>
+                <input type="number" id="valor-multa" name="multa-por-dia" step="0.01" value="{{ multa_por_dia }}"
+                    required>
+            </div>
+            <button type="submit" class="btn">Salvar</button>
+        </form>
     </main>
-
 
     <script src="{% static 'script/script.js' %}"></script>
 </body>
