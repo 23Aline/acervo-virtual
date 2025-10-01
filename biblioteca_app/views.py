@@ -5,13 +5,11 @@ from django.db import IntegrityError
 from django.contrib import messages
 from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao, PerfilUsuario
 from django.utils import timezone
-from datetime import date, datetime
+from datetime import datetime, date
 import decimal
-import datetime
 from django.views.decorators.http import require_POST 
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
-from datetime import date
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
@@ -264,6 +262,11 @@ def usuarios(request):
     }
     return render(request, 'usuarios.html', context)
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from datetime import datetime, date
+from .models import Livro, Leitor, Emprestimo
+
 def emprestimo(request):
     if request.method == 'POST':
         cpf = request.POST.get('cpf')
@@ -276,11 +279,20 @@ def emprestimo(request):
             return redirect('emprestimo')
 
         try:
+            data_emprestimo_obj = datetime.strptime(data_emprestimo_str, '%Y-%m-%d').date()
+            data_devolucao_obj = datetime.strptime(data_devolucao_str, '%Y-%m-%d').date()
+        except ValueError:
+            messages.error(request, "Formato de data inválido.", extra_tags="erro")
+            return redirect('emprestimo')
+
+        try:
             leitor = Leitor.objects.get(cpf=cpf)
-            livro = Livro.objects.get(titulo=titulo_livro)
         except Leitor.DoesNotExist:
             messages.error(request, "Leitor não encontrado.", extra_tags="erro")
             return redirect('emprestimo')
+
+        try:
+            livro = Livro.objects.get(titulo=titulo_livro)
         except Livro.DoesNotExist:
             messages.error(request, "Livro não encontrado.", extra_tags="erro")
             return redirect('emprestimo')
@@ -288,13 +300,6 @@ def emprestimo(request):
         emprestimos_ativos = Emprestimo.objects.filter(livro=livro, devolucao__isnull=True).count()
         if emprestimos_ativos >= livro.quantidade:
             messages.error(request, "Não há cópias disponíveis deste livro.", extra_tags="erro")
-            return redirect('emprestimo')
-
-        try:
-            data_emprestimo_obj = datetime.strptime(data_emprestimo_str, '%Y-%m-%d').date()
-            data_devolucao_obj = datetime.strptime(data_devolucao_str, '%Y-%m-%d').date()
-        except ValueError:
-            messages.error(request, "Formato de data inválido.", extra_tags="erro")
             return redirect('emprestimo')
 
         Emprestimo.objects.create(

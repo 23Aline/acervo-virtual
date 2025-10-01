@@ -39,6 +39,7 @@ class Leitor(models.Model):
 
     def __str__(self):
         return self.nome
+        
 class Emprestimo(models.Model):
     leitor = models.ForeignKey(Leitor, on_delete=models.CASCADE)
     livro = models.ForeignKey(Livro, on_delete=models.CASCADE)
