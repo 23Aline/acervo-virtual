@@ -59,11 +59,11 @@ def excluir_usuario(request, user_id):
                 messages.error(request, 'Você não pode excluir a sua própria conta.')
             else:
                 usuario_a_excluir.delete()
-                messages.success(request, f'Usuário "{usuario_a_excluir.username}" excluído com sucesso!')
+                messages.success(request, f'Usuário {usuario_a_excluir.username} excluído com sucesso!')
         except Exception as e:
             messages.error(request, f'Erro ao excluir o usuário: {e}')
     
-    return redirect('configuracao')
+    return redirect('configuracao_contas')
 
 def configuracao_multa(request):
     if request.method == 'POST' and request.POST.get('form-action') == 'salvar-multa':
@@ -102,7 +102,6 @@ def configuracao_contas(request):
     usuarios_cadastrados = User.objects.all()
     return render(request, 'contas.html', {'usuarios_cadastrados': usuarios_cadastrados})
 
-
 def configuracao_cadastro(request):
     if request.method == 'POST' and request.POST.get('form-action') == 'cadastro-usuario':
         username = request.POST.get('username')
@@ -110,15 +109,22 @@ def configuracao_cadastro(request):
         email = request.POST.get('email')
         cpf = request.POST.get('cpf')
         endereco = request.POST.get('endereco')
+        funcao = request.POST.get('funcao')  
 
-        if username and password and email and cpf and endereco:
+        if username and password and email and cpf and endereco and funcao:
             if User.objects.filter(username=username).exists():
                 messages.error(request, 'Nome de usuário já existe.')
             elif PerfilUsuario.objects.filter(cpf=cpf).exists():
                 messages.error(request, 'CPF já cadastrado.')
             else:
                 user = User.objects.create_user(username=username, password=password, email=email)
-                PerfilUsuario.objects.create(user=user, email=email, cpf=cpf, endereco=endereco)
+                PerfilUsuario.objects.create(
+                    user=user,
+                    email=email,
+                    cpf=cpf,
+                    endereco=endereco,
+                    funcao=funcao  
+                )
                 messages.success(request, 'Usuário cadastrado com sucesso!')
         return redirect('configuracao_cadastro')
 

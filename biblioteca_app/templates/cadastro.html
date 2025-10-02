@@ -98,11 +98,32 @@
                     <label for="endereco">Endereço</label>
                     <input type="text" id="endereco" name="endereco" required>
                 </div>
+                <div class="form-group">
+                    <label for="funcao">Função</label>
+                    <select id="funcao" name="funcao" required>
+                        <option value="" selected disabled>Selecione uma função</option>
+                        <option value="administrador">Administrador</option>
+                        <option value="bibliotecario">Bibliotecário</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn">Cadastrar</button>
             </form>
         </div>
+        <div id="modall-feedback" class="modall" style="display:none;">
+            <div class="modall-content">
+                <span class="close" onclick="fecharModalFeedback()">&times;</span>
+                <p id="modall-mensagem"></p>
+            </div>
+        </div>
     </main>
-
+    <script id="django-mensagens" type="application/json">
+    [
+        {% for message in messages %}
+        {"tipo": "{{ message.tags }}", "mensagem": "{{ message }}" }
+        {% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+    </script>
     <script src="{% static 'script/script.js' %}"></script>
 </body>
 

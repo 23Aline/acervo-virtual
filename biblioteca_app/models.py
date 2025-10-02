@@ -65,10 +65,16 @@ class Configuracao(models.Model):
         return "Configurações do Sistema"
 
 class PerfilUsuario(models.Model):
+    FUNCOES = [
+        ("administrador", "Administrador"),
+        ("bibliotecario", "Bibliotecário"),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="perfil")
     email = models.EmailField()
-    cpf = models.CharField(max_length=14, unique=True)  
+    cpf = models.CharField(max_length=14, unique=True)
     endereco = models.CharField(max_length=255)
+    funcao = models.CharField(max_length=20, choices=FUNCOES, default="bibliotecario" ) 
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username} - {self.funcao}"

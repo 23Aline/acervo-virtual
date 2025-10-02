@@ -354,7 +354,6 @@ document.addEventListener('DOMContentLoaded', function () {
     window.abrirModal = function (id, email, cpf, endereco) {
         document.getElementById("usuario_id").value = id;
         document.getElementById("modal-email").value = email;
-        document.getElementById("modal-cpf").value = cpf;
         document.getElementById("modal-endereco").value = endereco;
         document.getElementById("modal-editar").style.display = "flex";
     };
@@ -363,4 +362,21 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById("modal-editar").style.display = "none";
     };
 
-});
+    const djangoMensagensEl = document.getElementById("django-mensagens");
+    if (djangoMensagensEl) {
+        const mensagens = JSON.parse(djangoMensagensEl.textContent);
+        if (mensagens.length > 0) {
+            abrirModalFeedback(mensagens[0].mensagem);
+        }
+    }
+
+});    
+
+function abrirModalFeedback(mensagem) {
+    document.getElementById("modall-mensagem").innerText = mensagem;
+    document.getElementById("modall-feedback").style.display = "block";
+}
+
+function fecharModalFeedback() {
+    document.getElementById("modall-feedback").style.display = "none";
+}
