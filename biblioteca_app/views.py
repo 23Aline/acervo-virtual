@@ -262,11 +262,6 @@ def usuarios(request):
     }
     return render(request, 'usuarios.html', context)
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
-from datetime import datetime, date
-from .models import Livro, Leitor, Emprestimo
-
 def emprestimo(request):
     if request.method == 'POST':
         cpf = request.POST.get('cpf')
@@ -406,7 +401,7 @@ def multa(request):
 
     devolucoes_com_multa = []
 
-    hoje = datetime.date.today()
+    hoje = date.today()
 
     emprestimos_atrasados = Emprestimo.objects.filter(data_devolucao__lt=hoje, devolucao__isnull=True)
 

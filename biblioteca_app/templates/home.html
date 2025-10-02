@@ -30,9 +30,10 @@
             <li class="has-submenu">
                 <a href="#">Livros</a>
                 <ul class="submenu">
-                    <li><a href="{% url 'cadastro_livros' %}">Cadastro de Livros</a></li>
+                    <li><a href="{% url 'cadastro_livros' %}">Cadastro de Livros</a></li>       
                     <li><a href="{% url 'estoque' %}">Estoque</a></li>
                     <li><a href="{% url 'emprestimo' %}">Empréstimos</a></li>
+                    <li><a href="{% url 'reservas' %}">Reservas</a></li>                    
                 </ul>
             </li>
 
@@ -40,7 +41,6 @@
                 <a href="#"> Leitores</a>
                 <ul class="submenu">
                     <li><a href="{% url 'cadastro_leitor' %}">Cadastro de Leitor</a></li>
-                    <li><a href="{% url 'reservas' %}">Reservas</a></li>
                     <li><a href="{% url 'usuarios' %}">Leitores</a></li>
                 </ul>
             </li>
