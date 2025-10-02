@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        crossorigin="anonymous" />
+    <title>Reservas</title>
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <a href="{% url 'home' %}" class="w3-xlarge">
+                <img src="{% static 'img/biblioteca.png' %}" alt="Logo Acervo Digital" class="logo">
+                Acervo Digital
+            </a>
+            <button class="menu-toggle" aria-label="Abrir Menu">
+                <i class="fa fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <nav id="side-menu" class="side-menu">
+        <ul>
+            <li class="has-submenu">
+                <a href="#">Livros</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'cadastro_livros' %}">Cadastro de Livros</a></li>
+                    <li><a href="{% url 'estoque' %}">Estoque</a></li>
+                    <li><a href="{% url 'emprestimo' %}">Empréstimos</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <a href="#"> Leitores</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'cadastro_leitor' %}">Cadastro de Leitor</a></li>
+                    <li><a href="{% url 'reservas' %}">Reservas</a></li>
+                    <li><a href="{% url 'usuarios' %}">Leitores</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <a href="#">Relatórios</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'multa' %}">Relatório de Multas</a></li>
+                    <li><a href="{% url 'relatorio' %}">Relatório de Empréstimos</a></li>
+                </ul>
+            </li>
+
+            <li class="has-submenu">
+                <a href="#">Configurações</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'configuracao_multa' %}">Multa</a></li>
+                    <li><a href="{% url 'configuracao_contas' %}">Contas</a></li>
+                    <li><a href="{% url 'configuracao_cadastro' %}">Cadastro</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
+                    {% csrf_token %}
+                    <button type="submit">Sair</button>
+                </form>
+            </li>
+        </ul>
+    </nav>
+
+    <main>
+
+    </main>
+
+    <script src="{% static 'script/script.js' %}"></script>
+</body>
+
+</html>

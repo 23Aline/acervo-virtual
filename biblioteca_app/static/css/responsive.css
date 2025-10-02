@@ -30,6 +30,7 @@
     .side-menu li button {
         text-align: left;
         padding: 12px 20px;
+        margin-top: -5px;
     }
 
     .submenu {
@@ -104,6 +105,8 @@
     .container-form {
         max-width: 300%;
         margin-top: -20px;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 
     .form-grid {
@@ -239,19 +242,31 @@
     }
 }
 
-/*TELA DE EMPRESTIMO*/
+/* TELA DE EMPRESTIMO */
 @media (max-width: 768px) {
+    /* Ajusta o container principal, removendo margens laterais que podem estar limitando */
+    .container-emprestimo {
+        padding: 0 10px; /* Adiciona um pequeno padding nas laterais, se necessário */
+    }
+
     .emprestimo-content {
         flex-direction: column;
         align-items: center;
+        margin-top: 20px;
+        /* Remova as margens laterais no content ou defina para 'auto' */
+        margin-left: auto; 
+        margin-right: auto;
+        gap: 20px;
     }
 
     .emprestimo-info,
     .emprestimo-form-container {
         width: 100%;
-        max-width: 100%;
+        max-width: 95%; /* Use uma largura máxima um pouco menor que 100% para evitar encostar nas bordas */
         height: auto;
-        padding: 10px;
+        padding: 15px; /* Reduza o padding interno para aumentar o espaço do conteúdo */
+        margin: 0 auto; /* Centraliza o bloco na tela */
+        box-sizing: border-box; /* Garante que padding e borda não aumentem a largura total */
     }
 
     .emprestimo-info {
@@ -261,66 +276,109 @@
     }
 
     .livro-info-text {
-        font-size: 18px;
-        margin-top: 10px;
+        font-size: 16px;
+        margin-top: 8px;
+    }
+
+    /* Mantenha os botões lado a lado para tablets */
+    .form-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+    }
+
+    .btn-confirmar,
+    .btn-limpar {
+        width: 48%;
+        padding: 10px;
+    }
+}
+/* TELA DE EMPRESTIMO */
+@media (max-width: 768px) {
+    .container-emprestimo {
+        width: 100%;
+        max-width: 100%;
+        padding: 0; 
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    
+    .container-emprestimo h2 {
+        text-align: center;
+        padding-top: 20px; 
+    }
+
+    .emprestimo-content {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        width: 100%;
+        gap: 20px;
+    }
+
+    .emprestimo-info,
+    .emprestimo-form-container {
+        width: 95%; 
+        max-width: 95%;
+        height: auto;
+        margin: 0 auto; 
+        padding: 15px; 
+        box-sizing: border-box; 
+    }
+
+    .emprestimo-info {
+        background-color: #f2f2f2;
+        margin-bottom: 20px;
+        padding-top: 10px;
+    }
+    
+    .form-group input,
+    .form-group datalist,
+    .form-group p.info-adicional {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    .livro-info-text {
+        font-size: 16px;
+        margin-top: 8px;
     }
 
     .form-buttons {
         display: flex;
         gap: 10px;
+        justify-content: space-between;
     }
 
     .btn-confirmar,
     .btn-limpar {
-        width: 100%;
+        width: 48%; 
+        padding: 10px;
+        font-size: 14px;
     }
 }
 
 @media (max-width: 480px) {
-    .container-emprestimo {
-        padding: 15px;
-    }
-
     .container-emprestimo h2 {
-        font-size: 24px;
-        margin-top: -100px;
+        font-size: 20px;
     }
-
-    .emprestimo-content {
-        gap: 15px;
-    }
-
-    .emprestimo-info-container h3 {
-        font-size: 1rem;
-    }
-
-    #livro-capa {
-        max-width: 100px;
-    }
-
-    .livro-info-text {
-        font-size: 14px;
-    }
-
-    .form-group label {
-        font-size: 14px;
-    }
-
-    .form-group input,
-    .form-group p.info-adicional {
-        padding: 8px;
-        font-size: 14px;
+    
+    .emprestimo-info,
+    .emprestimo-form-container {
+        width: 98%; 
+        max-width: 98%;
+        padding: 10px; 
     }
 
     .form-buttons {
-        display: flex;
         gap: 8px;
     }
 
     .btn-confirmar,
     .btn-limpar {
-        padding: 10px;
-        font-size: 12px;
+        width: 100%; 
+        padding: 12px;
+        font-size: 14px;
     }
 }
 
@@ -329,7 +387,9 @@
     .livro-detalhes-container {
         max-width: 95%;
         padding: 10px;
-        margin-top: -100px;
+        margin-top: -50px;
+        margin-left: 10px;
+        margin-right: 15px;
     }
 
     .livro-detalhes-grid {
@@ -411,7 +471,9 @@
 @media (max-width: 768px) {
     .estoque-container {
         padding: 10px;
-        margin-top: -100px;
+        margin-top: -30px;
+        margin-left: 10px;
+        margin-right: 10px;
     }
 
     .tabela-estoque {
