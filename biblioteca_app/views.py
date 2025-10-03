@@ -6,13 +6,15 @@ from django.contrib import messages
 from .models import Livro, Leitor, Emprestimo, Devolucao, Configuracao, PerfilUsuario
 from django.utils import timezone
 from datetime import datetime, date
-import decimal
+import decimal, json
 from django.views.decorators.http import require_POST 
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
+from .decorators import admin_required
+from django.views.decorators.csrf import csrf_exempt
 
 def login_view(request):
     if request.method == 'POST':
@@ -22,12 +24,17 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            messages.success(request, f'Bem-vindo, {user.username}!')
-            return redirect('home') 
+
+            try:
+                perfil = user.perfil  
+                request.session['funcao'] = perfil.funcao
+            except PerfilUsuario.DoesNotExist:
+                request.session['funcao'] = None
+            return redirect('home')
         else:
             messages.error(request, 'Usuário ou senha inválidos. Tente novamente.')
             return render(request, 'login.html')
-            
+
     return render(request, 'login.html')
 
 @login_required(login_url='login_view')
@@ -65,6 +72,7 @@ def excluir_usuario(request, user_id):
     
     return redirect('configuracao_contas')
 
+@admin_required
 def configuracao_multa(request):
     if request.method == 'POST' and request.POST.get('form-action') == 'salvar-multa':
         valor_multa_str = request.POST.get('multa-por-dia')
@@ -78,7 +86,7 @@ def configuracao_multa(request):
     multa_por_dia = Configuracao.objects.first().multa_por_dia if Configuracao.objects.exists() else 2.50
     return render(request, 'valor_multa.html', {'multa_por_dia': multa_por_dia})
 
-
+@admin_required
 def configuracao_contas(request):
     if request.method == 'POST' and request.POST.get('form-action') == 'editar-usuario':
         usuario_id = request.POST.get('usuario_id')
@@ -102,6 +110,7 @@ def configuracao_contas(request):
     usuarios_cadastrados = User.objects.all()
     return render(request, 'contas.html', {'usuarios_cadastrados': usuarios_cadastrados})
 
+@admin_required
 def configuracao_cadastro(request):
     if request.method == 'POST' and request.POST.get('form-action') == 'cadastro-usuario':
         username = request.POST.get('username')
@@ -401,6 +410,7 @@ def devolver_livro(request, emprestimo_id):
 
     return redirect('reservas')
 
+@admin_required
 def multa(request):
     config = Configuracao.objects.first()
     valor_por_dia = config.multa_por_dia if config else decimal.Decimal('2.50')
@@ -508,7 +518,7 @@ def buscar_livro_por_id(request):
         return JsonResponse({'erro': 'Livro não encontrado'}, status=404)
     except Exception as e:
         return JsonResponse({'erro': str(e)}, status=500)
-    
+
 def buscar_livro_completo(request):
     titulo = request.GET.get('titulo')
     try:
@@ -540,4 +550,38 @@ def buscar_livro_completo(request):
         return JsonResponse(response_data)
     except Exception as e:
         return JsonResponse({'erro': str(e)}, status=500)
-    
+
+@login_required
+def configuracao_admin(request):
+    config = Configuracao.objects.first()
+    if not config:
+        config = Configuracao.objects.create(codigo_admin="10000")  
+
+    if request.method == "POST":
+        novo_codigo = request.POST.get("codigo_admin", "")
+        if novo_codigo.isdigit() and len(novo_codigo) == 5:
+            config.codigo_admin = novo_codigo
+            config.save()
+            return redirect('configuracao_admin')  
+    return render(request, "configuracao_admin.html", {"codigo_admin": config.codigo_admin})
+
+@csrf_exempt
+def verificar_codigo_admin(request):
+    if request.method != "POST":
+        return JsonResponse({"autorizado": False, "erro": "Método inválido"}, status=405)
+
+    import json
+    try:
+        data = json.loads(request.body)
+        codigo = data.get("codigo", "")
+    except Exception:
+        return JsonResponse({"autorizado": False, "erro": "Erro ao ler dados"}, status=400)
+
+    config = Configuracao.objects.first()
+    if not config:
+        return JsonResponse({"autorizado": False, "erro": "Código administrativo não configurado"})
+
+    if codigo == config.codigo_admin:
+        return JsonResponse({"autorizado": True})
+    else:
+        return JsonResponse({"autorizado": False, "erro": "Código incorreto"})

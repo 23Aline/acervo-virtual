@@ -30,10 +30,10 @@
             <li class="has-submenu">
                 <a href="#">Livros</a>
                 <ul class="submenu">
-                    <li><a href="{% url 'cadastro_livros' %}">Cadastro de Livros</a></li>       
+                    <li><a href="{% url 'cadastro_livros' %}">Cadastro de Livros</a></li>
                     <li><a href="{% url 'estoque' %}">Estoque</a></li>
                     <li><a href="{% url 'emprestimo' %}">Empréstimos</a></li>
-                    <li><a href="{% url 'reservas' %}">Reservas</a></li>                    
+                    <li><a href="{% url 'reservas' %}">Reservas</a></li>
                 </ul>
             </li>
 
@@ -44,7 +44,12 @@
                     <li><a href="{% url 'usuarios' %}">Leitores</a></li>
                 </ul>
             </li>
-
+            {% if request.session.funcao == "bibliotecario" %}
+            <li>
+                <a href="#" id="acesso-admin-btn">Acesso Administrativo</a>
+            </li>
+            {% endif %}
+            {% if request.session.funcao == "administrador" %}
             <li class="has-submenu">
                 <a href="#">Relatórios</a>
                 <ul class="submenu">
@@ -59,9 +64,10 @@
                     <li><a href="{% url 'configuracao_multa' %}">Multa</a></li>
                     <li><a href="{% url 'configuracao_contas' %}">Contas</a></li>
                     <li><a href="{% url 'configuracao_cadastro' %}">Cadastro</a></li>
+                    <li><a href="{% url 'configuracao_admin' %}">Administrador</a></li>
                 </ul>
             </li>
-
+            {% endif %}
             <li>
                 <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
                     {% csrf_token %}
@@ -101,6 +107,23 @@
             {% endfor %}
         </div>
     </main>
+
+    <div id="acesso-admin-modal" class="modal-admin">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Acesso Administrativo</h2>
+            <p>Digite o código administrativo:</p>
+            <form id="admin-auth-form">
+                <input type="text" id="admin-codigo" maxlength="5" required>
+                <button type="submit">Confirmar</button>
+            </form>
+            <p id="auth-error" style="color:rgb(153,33,33); display:none;">Código incorreto!</p>
+        </div>
+    </div>
+
+    <button id="sair-acesso-admin" style="display:none; position: fixed; bottom: 20px; left: 20px; z-index:1000;">
+        Sair do acesso administrativo
+    </button>
 
     <script src="{% static 'script/script.js' %}"></script>
 </body>

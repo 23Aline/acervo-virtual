@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-});    
+});
 
 function abrirModalFeedback(mensagem) {
     document.getElementById("modall-mensagem").innerText = mensagem;
@@ -380,3 +380,57 @@ function abrirModalFeedback(mensagem) {
 function fecharModalFeedback() {
     document.getElementById("modall-feedback").style.display = "none";
 }
+
+const modal = document.getElementById("modal-alterar-codigo");
+const btnAlterar = document.getElementById("alterar-codigo-btn");
+const spanClose = modal.querySelector(".close");
+const formAlterar = document.getElementById("form-alterar-codigo");
+const inputCodigo = document.getElementById("novo-codigo");
+const codigoAtual = document.getElementById("codigo-atual");
+const mensagemErro = document.getElementById("mensagem-erro");
+
+btnAlterar.onclick = () => {
+    modal.style.display = "block";
+    mensagemErro.style.display = "none";
+}
+
+spanClose.onclick = () => {
+    modal.style.display = "none";
+}
+
+window.onclick = (event) => {
+    if (event.target == modal) {
+        modal.style.display = "none";
+        mensagemErro.style.display = "none";
+    }
+}
+
+formAlterar.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const novoCodigo = inputCodigo.value;
+
+    fetch("{% url 'alterar_codigo_admin' %}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": getCookie("csrftoken")
+        },
+        body: JSON.stringify({ codigo: novoCodigo })
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.sucesso) {
+                codigoAtual.innerText = novoCodigo;
+                modal.style.display = "none";
+            } else {
+                mensagemErro.style.display = "block";
+                mensagemErro.innerText = data.erro || "Erro ao salvar o código";
+            }
+        })
+        .catch(err => {
+            mensagemErro.style.display = "block";
+            mensagemErro.innerText = "Erro de comunicação com o servidor";
+            console.error(err);
+        });
+});
+

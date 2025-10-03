@@ -60,6 +60,7 @@ class Devolucao(models.Model):
     
 class Configuracao(models.Model):
     multa_por_dia = models.DecimalField(max_digits=5, decimal_places=2, default=2.50)
+    codigo_admin = models.CharField(max_length=5, default='10000')
 
     def __str__(self):
         return "Configurações do Sistema"
