@@ -14,7 +14,6 @@ from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LogoutView
 from .decorators import admin_required
-from django.views.decorators.csrf import csrf_exempt
 
 def login_view(request):
     if request.method == 'POST':
@@ -550,38 +549,3 @@ def buscar_livro_completo(request):
         return JsonResponse(response_data)
     except Exception as e:
         return JsonResponse({'erro': str(e)}, status=500)
-
-@login_required
-def configuracao_admin(request):
-    config = Configuracao.objects.first()
-    if not config:
-        config = Configuracao.objects.create(codigo_admin="10000")  
-
-    if request.method == "POST":
-        novo_codigo = request.POST.get("codigo_admin", "")
-        if novo_codigo.isdigit() and len(novo_codigo) == 5:
-            config.codigo_admin = novo_codigo
-            config.save()
-            return redirect('configuracao_admin')  
-    return render(request, "configuracao_admin.html", {"codigo_admin": config.codigo_admin})
-
-@csrf_exempt
-def verificar_codigo_admin(request):
-    if request.method != "POST":
-        return JsonResponse({"autorizado": False, "erro": "Método inválido"}, status=405)
-
-    import json
-    try:
-        data = json.loads(request.body)
-        codigo = data.get("codigo", "")
-    except Exception:
-        return JsonResponse({"autorizado": False, "erro": "Erro ao ler dados"}, status=400)
-
-    config = Configuracao.objects.first()
-    if not config:
-        return JsonResponse({"autorizado": False, "erro": "Código administrativo não configurado"})
-
-    if codigo == config.codigo_admin:
-        return JsonResponse({"autorizado": True})
-    else:
-        return JsonResponse({"autorizado": False, "erro": "Código incorreto"})

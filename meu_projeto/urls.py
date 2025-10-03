@@ -20,7 +20,6 @@ urlpatterns = [
     path('configuracao/multa/', views.configuracao_multa, name='configuracao_multa'),
     path('configuracao/contas/', views.configuracao_contas, name='configuracao_contas'),
     path('configuracao/cadastro/', views.configuracao_cadastro, name='configuracao_cadastro'),
-    path('configuracao/admin/', views.configuracao_admin, name='configuracao_admin'),
     path('api/leitor/buscar/', views.buscar_leitor, name='buscar_leitor'),
     path('api/livro/buscar/', views.buscar_livro, name='buscar_livro'),
     path('livro/<int:livro_id>/', views.livro_detalhes, name='livro_detalhes'),
@@ -39,7 +38,6 @@ urlpatterns = [
     path('reset-password-sent/', auth_views.PasswordResetDoneView.as_view(template_name="reset_password_sent.html"), name="password_reset_done"),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name="reset_password_confirm.html"), name="password_reset_confirm"),
     path('reset-password-complete/', auth_views.PasswordResetCompleteView.as_view(template_name="reset_password_complete.html"), name="password_reset_complete"),
-    path('verificar_codigo_admin/', views.verificar_codigo_admin, name='verificar_codigo_admin'),
 ]
 
 if settings.DEBUG:

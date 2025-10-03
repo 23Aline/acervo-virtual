@@ -33,15 +33,6 @@
                     <li><a href="{% url 'cadastro_livros' %}">Cadastro de Livros</a></li>
                     <li><a href="{% url 'estoque' %}">Estoque</a></li>
                     <li><a href="{% url 'emprestimo' %}">Empréstimos</a></li>
-                </ul>
-            </li>
-
-            <li class="has-submenu">
-                <a href="#">Livros</a>
-                <ul class="submenu">
-                    <li><a href="{% url 'cadastro_livros' %}">Cadastro de Livros</a></li>
-                    <li><a href="{% url 'estoque' %}">Estoque</a></li>
-                    <li><a href="{% url 'emprestimo' %}">Empréstimos</a></li>
                     <li><a href="{% url 'reservas' %}">Reservas</a></li>
                 </ul>
             </li>
@@ -53,17 +44,23 @@
                     <li><a href="{% url 'usuarios' %}">Leitores</a></li>
                 </ul>
             </li>
-
+            {% if request.session.funcao == "administrador" %}
+            <li class="has-submenu">
+                <a href="#">Relatórios</a>
+                <ul class="submenu">
+                    <li><a href="{% url 'multa' %}">Relatório de Multas</a></li>
+                    <li><a href="{% url 'emprestimo' %}">Relatório de Empréstimos</a></li>
+                </ul>
+            </li>
             <li class="has-submenu">
                 <a href="#">Configurações</a>
                 <ul class="submenu">
                     <li><a href="{% url 'configuracao_multa' %}">Multa</a></li>
                     <li><a href="{% url 'configuracao_contas' %}">Contas</a></li>
                     <li><a href="{% url 'configuracao_cadastro' %}">Cadastro</a></li>
-                    <li><a href="{% url 'configuracao_admin' %}">Administrador</a></li>
                 </ul>
             </li>
-
+            {% endif %}
             <li>
                 <form method="POST" action="{% url 'logout' %}" style="margin: 0;">
                     {% csrf_token %}
