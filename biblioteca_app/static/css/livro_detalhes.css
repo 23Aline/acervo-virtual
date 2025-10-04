@@ -1,0 +1,138 @@
+.livro-detalhes-container {
+    max-width: 1000px;
+    padding: 10px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    margin-left: 120px;
+    margin-right: 0;
+}
+
+.livro-detalhes-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.livro-detalhes-grid {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.livro-info-principal {
+    flex: 1;
+    text-align: center;
+    position: relative;
+}
+
+.status-tag {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-top: -30px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.8rem;
+    z-index: 10;
+}
+
+.status-tag.disponivel {
+    background-color: #28a745;
+}
+
+.status-tag.esgotado {
+    background-color: #dc3545;
+}
+
+.capa-detalhes {
+    width: 200px;
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.capa-placeholder-detalhes {
+    width: 200px;
+    height: 300px;
+    background-color: #d0d0d0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.livro-dados-texto p {
+    margin: 5px 0;
+    font-size: 1rem;
+    text-align: left;
+}
+
+.livro-sinopse {
+    flex: 2;
+}
+
+.livro-sinopse h3 {
+    font-size: 1.2rem;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.data-devolucao-info {
+    font-weight: bold;
+    color: #dc3545;
+    margin-top: 15px;
+}
+
+.btn-voltar-detalhes,
+.btn-reservar-detalhes,
+.btn-esgotado {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.livro-detalhes-botoes {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.btn-voltar-detalhes {
+    background-color: #9b2c37;
+}
+
+.btn-reservar-detalhes {
+    background-color: #1C325B;
+}
+
+.btn-esgotado {
+    background-color: #8693ab;
+    cursor: not-allowed;
+}
+
+.btn {
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 20px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #8693ab;
+}
