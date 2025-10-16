@@ -211,3 +211,124 @@
 .btn:hover {
     background-color: #8693ab;
 }
+
+/*RESPONSIVE*/
+@media (max-width: 768px) {
+    main.configuracoes-main {
+        margin-right: 0;
+        padding-top: 80px;
+        padding-left: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .configuracoes-conteudo {
+        max-width: none;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+    
+    .tabela-config {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .tabela-config th,
+    .tabela-config td {
+        padding: 10px;
+        font-size: 15px;
+    }
+    
+    #modal-editar .modal-content,
+    .modall-content {
+        width: 90%;
+        max-width: 450px;
+        margin: 15% auto;
+    }
+
+    .modal-editar form {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .btn-cancelar,
+    .btn-alteracoes {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .configuracoes-conteudo {
+        padding: 10px;
+    }
+    
+    .configuracoes-conteudo h3 {
+        font-size: 20px;
+    }
+    
+    .tabela-config {
+        display: block;
+        overflow-x: hidden;
+    }
+
+    .tabela-config thead {
+        display: none;
+    }
+
+    .tabela-config tbody tr {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #fefefe;
+    }
+    
+    .tabela-config tbody tr:nth-child(even) {
+        background-color: #fefefe;
+    }
+
+    .tabela-config tbody td {
+        display: block;
+        border: none;
+        padding: 5px 0;
+        position: relative; 
+        padding-left: 100px;
+        white-space: normal; 
+        text-align: left;
+    }
+    
+    .tabela-config tbody td::before {
+        content: ''; 
+        position: absolute;
+        top: 5px;
+        left: 0;
+        font-weight: bold;
+        color: #555;
+        width: 95px;
+    }
+    
+    .tabela-config tbody td:nth-child(1) { grid-column: 1 / -1; font-weight: bold; padding-left: 0; }
+    .tabela-config tbody td:nth-child(2)::before { content: "Função:"; } 
+    .tabela-config tbody td:nth-child(3) { grid-column: 1 / -1; padding: 10px 0 0 0; text-align: center; } 
+    
+    .tabela-config tbody td:nth-child(3) button,
+    .tabela-config tbody td:nth-child(3) form {
+        display: inline-block;
+        margin: 5px;
+    }
+    
+    #modal-editar .modal-content,
+    .modall-content {
+        margin: 30% auto;
+        width: 95%;
+        padding: 15px;
+    }
+}

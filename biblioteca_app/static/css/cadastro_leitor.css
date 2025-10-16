@@ -102,3 +102,91 @@
     background-color: #9b2c37;
     color: white;
 }
+
+/*RESPONSIVE*/
+@media (max-width: 768px) {
+    main {
+        margin-right: 0; 
+        width: 100%;
+        padding-left: 0; 
+        box-sizing: border-box;
+    }
+    .container-form {
+        width: 100%; 
+        max-width: none; 
+        margin: 0 auto; 
+        padding: 20px; 
+        border-radius: 0; 
+        box-shadow: none; 
+    }
+
+    .container-form h2 {
+        font-size: 1.6rem;
+    }
+    
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 15px;
+    }
+    
+    .radio-group {
+        grid-column: 1 / span 2; 
+    }
+
+    .radio-options {
+        flex-direction: row; 
+        gap: 15px;
+    }
+
+    .radio-options label {
+        padding: 10px 15px; 
+        font-size: 0.95rem;
+    }
+    
+    .btn {
+        padding: 12px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container-form {
+        padding: 15px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr; 
+        gap: 12px;
+    }
+
+    .form-group label {
+        font-size: 0.95rem;
+    }
+
+    .form-group input,
+    .form-group select {
+        font-size: 0.95rem;
+        padding: 10px;
+    }
+    
+    .radio-group {
+        grid-column: 1 / span 1; 
+        margin-top: 15px;
+    }
+
+    .radio-options {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .radio-options label {
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box; 
+    }
+
+    .btn {
+        font-size: 15px;
+        padding: 12px;
+    }
+}

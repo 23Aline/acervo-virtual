@@ -1,27 +1,3 @@
-.modal-botoes {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
-}
-
-.btn {
-    background-color: #1C325B;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 20px;
-    width: 100%;
-    transition: background-color 0.3s ease;
-}
-
-.btn:hover {
-    background-color: #8693ab;
-}
-
 .estoque-container {
     max-width: 900px;
     margin: 40px auto;
@@ -57,16 +33,32 @@
     align-items: center;
 }
 
-.btn-devolucao {
+.botoes-acao .btn-editar,
+.botoes-acao .btn-excluir {
     padding: 8px 12px;
     border: none;
     border-radius: 4px;
     color: white;
     cursor: pointer;
+}
+
+.botoes-acao .btn-editar {
     background-color: #1C325B;
 }
 
-#modal-devolucao {
+.botoes-acao .btn-excluir {
+    background-color: #9b2c37;
+}
+
+.botoes-acao .btn-excluir {
+    background-color: #9b2c37;
+    text-decoration: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+}
+
+.modal {
     display: none;
     position: fixed;
     z-index: 1000;
@@ -78,18 +70,18 @@
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-#modal-devolucao .modal-conteudo {
+.modal-conteudo {
     background-color: #fefefe;
     margin: 10% auto;
     padding: 20px;
     border-radius: 8px;
     width: 90%;
-    max-width: 500px;
+    max-width: 600px;
     position: relative;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-#modal-devolucao .fechar-modal {
+.fechar-modal {
     color: #aaa;
     float: right;
     font-size: 28px;
@@ -97,70 +89,56 @@
     cursor: pointer;
 }
 
-#modal-devolucao .modal-conteudo h3 {
+.modal-conteudo h3 {
     text-align: center;
     margin-bottom: 20px;
 }
 
-#modal-devolucao .form-group label {
-    font-weight: bold;
-    color: #555;
-}
-
-#modal-devolucao .form-group p {
-    background-color: #e9e9e9;
-    padding: 10px;
-    border-radius: 4px;
-    margin-top: 5px;
+.capa-preview {
+    max-width: 100px;
     height: auto;
+    margin-top: 10px;
 }
 
-#modal-devolucao .form-group input {
-    width: 100%;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-#modal-devolucao .modal-botoes {
+.modal-botoes {
     display: flex;
     justify-content: center;
     gap: 20px;
     margin-top: 20px;
 }
 
-.btn-confirmar-modal {
+.btn {
     background-color: #1C325B;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+    margin-top: 20px;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #8693ab;
+}
+
+.btn-salvar-modal,
+.btn-voltar-modal {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-salvar-modal {
+    background-color: #1C325B;
 }
 
 .btn-voltar-modal {
     background-color: #9b2c37;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#btn-pago {
-    background-color: #7fa46d;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    padding: 8px 16px;
-    font-size: 17px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#btn-pago:hover {
-    background-color: #4b6339;
 }
 
 .form-group {
@@ -228,37 +206,39 @@
         font-size: 15px;
     }
     
-    #modal-devolucao .modal-conteudo {
-        width: 80%;
-        max-width: 90%;
-        margin: 10% auto;
-        padding: 15px;
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
     }
     
-    #modal-devolucao .modal-conteudo h3 {
-        font-size: 18px;
+    #sinopse-edicao,
+    #capa-preview {
+        grid-column: span 2;
+    }
+    
+    .modal-conteudo {
+        width: 80%;
+        margin: 10% auto;
+        padding: 10px;
     }
 
-    #btn-pago {
-        width: 100%;
-        margin-top: 10px;
-    }
-    
-    .btn-confirmar-modal,
-    .btn-voltar-modal {
-        width: 150px;
-        padding: 10px;
-        font-size: 15px;
+    .modal-conteudo h3 {
+        font-size: 18px;
     }
     
     .modal-botoes {
         gap: 10px;
     }
+
+    .btn-salvar-modal,
+    .btn-voltar-modal {
+        padding: 10px 15px;
+    }
 }
 
 @media (max-width: 480px) {
     .estoque-container {
-        padding: 0 5px; 
+        padding: 0 10px; 
         margin: 10px auto;
     }
 
@@ -279,7 +259,7 @@
 
     .tabela-estoque tbody tr {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr; 
         margin-bottom: 15px;
         border: 1px solid #ddd;
         border-radius: 8px;
@@ -297,7 +277,7 @@
         border: none;
         padding: 5px 0;
         position: relative; 
-        padding-left: 100px;
+        padding-left: 100px; 
         white-space: normal; 
     }
     
@@ -310,13 +290,13 @@
         color: #555;
         width: 95px; 
     }
-    
     .tabela-estoque tbody td:nth-child(1) { grid-column: 1 / -1; font-weight: bold; padding-left: 0; } 
     .tabela-estoque tbody td:nth-child(2) { grid-column: 1 / -1; font-style: bold; color: #000000; padding-left: 0; } 
-    .tabela-estoque tbody td:nth-child(3)::before { content: "Devolução:"; }
-    .tabela-estoque tbody td:nth-child(4)::before { content: "Atrasado:"; }
-    .tabela-estoque tbody td:nth-child(5) { grid-column: 1 / -1; padding: 10px 0 0 0; } 
-    
+    .tabela-estoque tbody td:nth-child(3)::before { content: "Total:"; }
+    .tabela-estoque tbody td:nth-child(4)::before { content: "Disponíveis:"; }
+    .tabela-estoque tbody td:nth-child(5)::before { content: "Emprestados:"; }
+    .tabela-estoque tbody td:nth-child(6) { grid-column: 1 / -1; padding: 10px 0 0 0; } 
+
     .botoes-acao {
         display: flex;
         justify-content: center;
@@ -325,23 +305,32 @@
         grid-column: 1 / -1;
     }
 
-    .btn-devolucao {
-        width: 100%;
-        padding: 10px;
+    .botoes-acao .btn-editar,
+    .botoes-acao .btn-excluir {
+        flex-grow: 1;
+        text-align: center;
+        box-sizing: border-box;
+        padding: 10px 12px;
         font-size: 14px;
     }
     
-    #modal-devolucao .modal-conteudo {
-        margin: 20% auto;
-        padding: 15px;
+    .modal-conteudo {
+        margin: 30% auto;
+        padding: 10px;
     }
-    
-    #modal-devolucao .modal-botoes {
+
+    .form-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-botoes {
         flex-direction: column;
         gap: 8px;
     }
 
-    .btn-confirmar-modal,
+    .btn-salvar-modal,
     .btn-voltar-modal {
         width: 100%;
         padding: 10px;

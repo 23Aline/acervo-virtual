@@ -106,10 +106,10 @@
     background-color: #9ABF80;
     color: #fff;
     display: flex;
-    justify-content: center; 
-    gap: 30px; 
+    justify-content: center;
+    gap: 30px;
     padding: 5px 10px;
-    align-items: center; 
+    align-items: center;
     bottom: 0;
     left: 0;
     width: 100%;
@@ -122,8 +122,8 @@
 }
 
 main {
-    min-height: calc(100vh - 120px); 
-    margin-right: 260px; 
+    min-height: calc(100vh - 120px);
+    margin-right: 260px;
     padding-top: 100px;
     padding-bottom: 40px;
     box-sizing: border-box;
@@ -132,13 +132,13 @@ main {
 body {
     display: flex;
     flex-direction: column;
-    min-height: 100vh; 
+    min-height: 100vh;
     margin: 0;
     height: 100%;
 }
 
 html {
-    overflow-y: scroll; 
+    overflow-y: scroll;
 }
 
 /*TELA HOME*/
@@ -253,85 +253,201 @@ html {
     background-color: #8693ab;
 }
 
-/*TELA DE LOGIN*/
-body.login-page {
-    margin: 0;
-    padding: 0;
-    margin-top: -100px;
-    min-height: 100vh;
-    display: flex;
+/*RESPONSIVE*/
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 40px;
+        z-index: 1020;
+        overflow-y: auto;
+    }
+
+    body.menu-open .side-menu {
+        right: 0;
+    }
+
+    .side-menu ul {
+        display: block;
+        text-align: left;
+    }
+
+    .side-menu li {
+        padding: 0;
+        text-align: left;
+        border-bottom: 1px solid #7fa46d;
+    }
+
+    .side-menu a,
+    .side-menu li button {
+        text-align: left;
+        padding: 12px 20px;
+        margin-top: -5px;
+    }
+
+    .submenu {
+        display: none;
+        position: static;
+        width: 100%;
+        background-color: #7fa46d;
+        padding: 0;
+    }
+
+    .submenu li {
+        padding: 0;
+        border: none;
+    }
+
+    .submenu li a {
+        padding: 8px 30px;
+    }
+
+    .has-submenu.open>.submenu {
+        display: block;
+    }
+
+    .side-menu form button {
+        background-color: transparent;
+        border: none;
+        color: white;
+        font-size: 18px;
+        text-align: left;
+        cursor: pointer;
+        width: 100%;
+        padding: 12px 20px;
+    }
+
+    .side-menu form button:hover {
+        background-color: #53703f;
+    }
+
 }
 
-.login-container {
-    display: flex;
-    flex-direction: row;
-    width: 100vw;
-    height: 100vh;
+@media (max-width: 480px) {
+    .navbar a {
+        font-size: 24px;
+        margin-left: 10px;
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+    .side-menu {
+        width: 200px;
+        right: -200px;
+    }
+
+    body.menu-open .side-menu {
+        right: 0;
+    }
+
+    .side-menu a,
+    .side-menu li button {
+        font-size: 16px;
+    }
+
+    .submenu li a {
+        font-size: 14px;
+    }
 }
 
-.login-form-box {
-    width: 350px;
-    background-color: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+@media (max-width: 600px) {
+    .footer {
+        flex-direction: column;
+        text-align: center;
+        gap: 5px;
+        padding: 10px 10px;
+        font-size: 14px;
+    }
+
+    .footer p {
+        margin: 3px 0;
+    }
 }
 
-.login-form-box h2 {
-    margin-top: -40px;
-    margin-bottom: 20px;
-    color: black;
-    font-size: 40px;
+/*TELA HOME*/
+@media (max-width: 768px) {
+    main {
+        margin-right: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .buscador {
+        width: 100%;
+        top: 80px;
+        padding: 10px;
+        margin-top: -5px;
+        box-sizing: border-box;
+    }
+
+    .pesquisa {
+        display: flex;
+        width: 95%;
+        max-width: 600px;
+        gap: 0;
+    }
+
+    #buscar {
+        padding: 12px 15px;
+        flex-grow: 1;
+    }
+
+    .pesquisa button {
+        width: auto;
+        padding: 12px 15px;
+        border-radius: 0 25px 25px 0;
+    }
+
+    .livros-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 20px 10px;
+        margin-top: 25px;
+    }
+
+    .livro-card {
+        width: 100%;
+    }
+
+    .capa-container {
+        height: 250px;
+        width: 100%;
+    }
+
+    .livro-titulo {
+        font-size: 0.95rem;
+    }
+
+    .livro-autor {
+        font-size: 0.85rem;
+    }
 }
 
-.login-form-box input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
+@media (max-width: 480px) {
+    .pesquisa {
+        width: 100%;
+        max-width: none;
+    }
 
-.login-form-box .form-group label {
-    color: black;
-    font-weight: bold;
-    margin-bottom: 0;
-    margin-top: 2px;
-}
+    .livros-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 15px;
+    }
 
-.login-image-box {
-    flex: 1;
-    background-color: #9ABF80;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+    .livro-card {
+        margin: 0 auto;
+        max-width: 250px;
+    }
 
-.login-image-box img {
-    max-width: 80%;
-    height: auto;
-}
-
-ul.messages {
-    display: none;
-}
-
-.forgot-password {
-    margin-top: 10px;
-    text-align: center;
-}
-
-.forgot-password a {
-    color: #1C325B;
-    font-size: 17px;
-    text-decoration: none;
-    transition: color 0.2s;
-    text-align: center;
-}
-
-.forgot-password a:hover {
-    text-decoration: underline;
+    .capa-container {
+        width: 100%;
+        height: 300px;
+    }
 }
