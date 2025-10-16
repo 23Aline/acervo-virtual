@@ -98,7 +98,11 @@
                         <td>{{ livro.emprestados }}</td>
                         <td class="botoes-acao">
                             <button class="btn-editar">Editar</button>
-                            <a href="{% url 'excluir_livro' livro.id %}" class="btn-excluir">Excluir</a>
+
+                            <form method="POST" action="{% url 'excluir_livro' livro.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-excluir">Excluir</button>
+                            </form>
                         </td>
                     </tr>
 
@@ -165,6 +169,17 @@
         </div>
     </main>
 
+    {% if messages %}
+    <div id="modal-feedback" class="modal" style="display: flex;">
+        <div class="modal-conteudo" id="conteudo-feedback">
+            <span class="fechar-modal" onclick="fecharModalFeedback()">&times;</span>
+            {% for message in messages %}
+            <p class="mensagem-feedback {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+            <button class="btn-voltar-modal" onclick="fecharModalFeedback()">Fechar</button>
+        </div>
+    </div>
+    {% endif %}
 
     <script src="{% static 'script/script.js' %}"></script>
 

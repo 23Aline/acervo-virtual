@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const botoesExcluir = document.querySelectorAll(".btn-excluir");
+    botoesExcluir.forEach(botao => {
+        botao.addEventListener("click", e => {
+            if (!confirm("Tem certeza que deseja excluir?")) {
+                e.preventDefault();
+            }
+        });
+    });
 
+    /*MENU LATERAL*/
     const menuToggle = document.querySelector('.menu-toggle');
     const body = document.body;
 
@@ -31,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    /*CEP*/
     const urlEmprestimo = window.urlEmprestimo || '/';
 
     const cepInput = document.getElementById('cep');
@@ -62,6 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    /*BUSCA POR CPF*/
     const cpfInput = document.getElementById('cpf');
     if (cpfInput) {
         const leitorNomeDisplay = document.getElementById('leitor-nome');
@@ -89,6 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    /*BUSCA LIVRO EMPRESTIMO*/
     const livroBuscaInput = document.getElementById('livro-busca');
     if (livroBuscaInput) {
         const livroCapaDisplay = document.getElementById('livro-capa');
@@ -101,11 +113,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const modalIndisponivel = document.getElementById('modal-livro-indisponivel');
         const mensagemIndisponivel = document.getElementById('mensagem-indisponivel');
 
-        function fecharModal() { modalIndisponivel.style.display = 'none'; }
-        modalIndisponivel.querySelectorAll('.fechar-modal, .btn-voltar-modal').forEach(btn => {
-            btn.addEventListener('click', fecharModal);
-        });
-        window.addEventListener('click', (e) => { if (e.target === modalIndisponivel) fecharModal(); });
+        function fecharModalIndisponivel() { modalIndisponivel.style.display = 'none'; }
+
+        if (modalIndisponivel) {
+            modalIndisponivel.querySelectorAll('.fechar-modal, .btn-voltar-modal').forEach(btn => {
+                btn.addEventListener('click', fecharModalIndisponivel);
+            });
+            window.addEventListener('click', (e) => {
+                if (e.target === modalIndisponivel) fecharModalIndisponivel();
+            });
+        }
+
 
         livroBuscaInput.addEventListener('change', () => {
             const tituloBusca = livroBuscaInput.value;
@@ -145,6 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    /*LIMPAR FORMULÁRIO DE EMPRÉSTIMO*/
     const limparBtn = document.querySelector('.btn-limpar');
     if (limparBtn) {
         limparBtn.addEventListener('click', () => {
@@ -152,12 +171,15 @@ document.addEventListener('DOMContentLoaded', function () {
             form.reset();
             ['leitor-nome', 'multa-info', 'livro-capa', 'livro-titulo', 'livro-autor', 'livro-edicao', 'livro-numero_paginas', 'livro-genero', 'livro-classificacao'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el.tagName === 'IMG') { el.src = ''; el.style.display = 'none'; }
-                else el.innerText = '';
+                if (el) {
+                    if (el.tagName === 'IMG') { el.src = ''; el.style.display = 'none'; }
+                    else el.innerText = '';
+                }
             });
         });
     }
 
+    /*MODAIS*/
     const modalSucesso = document.getElementById("modal-sucesso");
     const modalErro = document.getElementById("modal-erro");
 
@@ -166,6 +188,11 @@ document.addEventListener('DOMContentLoaded', function () {
         if (mensagemSucesso) {
             modalSucesso.style.display = "block";
         }
+        document.querySelectorAll(".fechar-modal-sucesso, .btn-fechar-modal-sucesso").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                modalSucesso.style.display = "none";
+            });
+        });
     }
 
     if (modalErro) {
@@ -173,14 +200,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (mensagemErro) {
             modalErro.style.display = "block";
         }
+        document.querySelectorAll(".fechar-modal-erro, .btn-fechar-modal-erro").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+                modalErro.style.display = "none";
+            });
+        });
     }
 
-    document.querySelectorAll(".fechar-modal-sucesso, .btn-fechar-modal-sucesso").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-            modalSucesso.style.display = "none";
-        });
-    });
-
+    /*MODAL DE EDIÇÃO DE LEITOR*/
     const btnsEditarLeitor = document.querySelectorAll(".btn-editar[data-leitor-id]");
     const modalEdicaoLeitor = document.getElementById("modal-edicao-leitor");
     const fecharModalLeitor = modalEdicaoLeitor?.querySelector(".fechar-modal");
@@ -218,6 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    /* MODAL DE EDIÇÃO DE LIVRO*/
     const btnsEditarLivro = document.querySelectorAll(".btn-editar:not([data-leitor-id])");
     const modalEdicaoLivro = document.getElementById("modal-edicao");
     const btnFecharLivro = modalEdicaoLivro?.querySelector(".fechar-modal");
@@ -259,6 +287,8 @@ document.addEventListener('DOMContentLoaded', function () {
             modalEdicaoLivro.style.display = "none";
         }
     });
+
+    /*MODAL DE DEVOLUÇÃO*/
     const btnsDevolucao = document.querySelectorAll(".btn-devolucao");
     const modalDevolucao = document.getElementById("modal-devolucao");
     const fecharModalDevolucao = modalDevolucao?.querySelector(".fechar-modal");
@@ -344,40 +374,67 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (res.redirected) {
                     window.location.href = res.url;
                 } else {
-                    alert("Devolução concluída!");
-                    modalDevolucao.style.display = "none";
+                    window.location.reload();
                 }
             })
             .catch(err => console.error(err));
     });
 
+    /*MODAL DE EDIÇÃO DE CONTA*/
     window.abrirModal = function (id, email, cpf, endereco) {
         document.getElementById("usuario_id").value = id;
         document.getElementById("modal-email").value = email;
         document.getElementById("modal-endereco").value = endereco;
-        document.getElementById("modal-editar").style.display = "flex";
+        const modalEditar = document.getElementById("modal-editar");
+        if (modalEditar) {
+            modalEditar.style.display = "flex";
+        }
     };
 
     window.fecharModal = function () {
-        document.getElementById("modal-editar").style.display = "none";
+        const modalEditar = document.getElementById("modal-editar");
+        if (modalEditar) {
+            modalEditar.style.display = "none";
+        }
     };
 
+    /*TRATAMENTO DE MENSAGENS DJANGO*/
     const djangoMensagensEl = document.getElementById("django-mensagens");
     if (djangoMensagensEl) {
-        const mensagens = JSON.parse(djangoMensagensEl.textContent);
-        if (mensagens.length > 0) {
-            abrirModalFeedback(mensagens[0].mensagem);
+        try {
+            const mensagens = JSON.parse(djangoMensagensEl.textContent);
+            if (mensagens.length > 0) {
+                abrirModalFeedback(mensagens[0].mensagem, mensagens[0].tipo);
+            }
+        } catch (e) {
+            console.error("Erro ao parsear mensagens do Django:", e);
         }
     }
 
 });
 
-function abrirModalFeedback(mensagem) {
-    document.getElementById("modall-mensagem").innerText = mensagem;
-    document.getElementById("modall-feedback").style.display = "block";
+
+window.fecharModalFeedback = function () {
+    const modal1 = document.getElementById("modal-feedback");
+    if (modal1) { modal1.style.display = "none"; }
+
+    const modal2 = document.getElementById("modall-feedback");
+    if (modal2) { modal2.style.display = "none"; }
 }
 
-function fecharModalFeedback() {
-    document.getElementById("modall-feedback").style.display = "none";
-}
+window.abrirModalFeedback = function (mensagem = null, tipo = null) {
+    const modal = document.getElementById("modal-feedback") || document.getElementById("modall-feedback");
+    const conteudo = document.getElementById("conteudo-feedback");
 
+    if (mensagem && conteudo) {
+        conteudo.innerHTML = `
+            <span class="fechar-modal" onclick="fecharModalFeedback()">&times;</span>
+            <p class="mensagem-feedback ${tipo || 'info'}">${mensagem}</p>
+            <button class="btn-voltar-modal" onclick="fecharModalFeedback()">Fechar</button>
+        `;
+    }
+
+    if (modal) {
+        modal.style.display = "flex";
+    }
+}

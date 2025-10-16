@@ -136,6 +136,20 @@
     </main>
     <script src="{% static 'script/script.js' %}"></script>
 
+    {% if messages %}
+    <div id="modal-feedback" class="modal" style="display: flex;">
+        <div class="modal-conteudo" id="conteudo-feedback">
+            <span class="fechar-modal" onclick="fecharModalFeedback()">&times;</span>
+            {% for message in messages %}
+            <p class="mensagem-feedback {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+            <button class="btn-voltar-modal" onclick="fecharModalFeedback()">Fechar</button>
+        </div>
+    </div>
+    {% endif %}
+
+    <script src="{% static 'script/script.js' %}"></script>
+
     <footer class="footer">
         <p>&copy; 2025 Acervo Digital - Todos os direitos reservados.</p>
         <p>Desenvolvido por <span class="autor">Grupo 12</span></p>

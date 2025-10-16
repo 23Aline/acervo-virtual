@@ -253,6 +253,73 @@ html {
     background-color: #8693ab;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none; 
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-conteudo {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 25px 35px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  position: relative;
+  animation: aparecer 0.3s ease;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+}
+
+.fechar-modal {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.fechar-modal:hover {
+  color: #000;
+}
+
+.btn-voltar-modal {
+  background-color: #1C325B;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  margin-top: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.btn-voltar-modal:hover {
+  background-color: #86ac6c;
+}
+
+.mensagem-feedback.success {
+  color: #4b6339;
+}
+.mensagem-feedback.error {
+  color: #b14942; 
+}
+.mensagem-feedback.warning {
+  color: #000; 
+}
+.mensagem-feedback.info {
+  color: #1C325B; /
+}
+
 /*RESPONSIVE*/
 @media (max-width: 768px) {
     .menu-toggle {

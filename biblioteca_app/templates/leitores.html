@@ -93,7 +93,13 @@
                         <td>{% if leitor.possui_multa %}Sim{% else %}Não{% endif %}</td>
                         <td class="botoes-acao">
                             <button class="btn-editar" data-leitor-id="{{ leitor.id }}">Editar</button>
-                            <a href="{% url 'excluir_leitor' leitor.id %}" class="btn-excluir">Excluir</a>
+
+                            <form method="POST" action="{% url 'excluir_leitor' leitor.id %}" style="display:inline;"
+                                id="form-excluir-leitor-{{ leitor.id }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-excluir"
+                                    data-leitor-id="{{ leitor.id }}">Excluir</button>
+                            </form>
                         </td>
                     </tr>
                     {% endfor %}
@@ -146,6 +152,18 @@
             </div>
         </div>
     </main>
+
+    {% if messages %}
+    <div id="modal-feedback" class="modal" style="display: flex;">
+        <div class="modal-conteudo" id="conteudo-feedback">
+            <span class="fechar-modal" onclick="fecharModalFeedback()">&times;</span>
+            {% for message in messages %}
+            <p class="mensagem-feedback {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+            <button class="btn-voltar-modal" onclick="fecharModalFeedback()">Fechar</button>
+        </div>
+    </div>
+    {% endif %}
 
     <script src="{% static 'script/script.js' %}"></script>
 

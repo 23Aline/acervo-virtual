@@ -72,19 +72,31 @@
 
     <main class="configuracoes-main">
         <div class="configuracoes-conteudo">
-        <h3>Configuração de Multa</h3>
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="form-action" value="salvar-multa">
-            <div class="form-group">
-                <label for="valor-multa">Valor por dia (R$):</label>
-                <input type="number" id="valor-multa" name="multa-por-dia" step="0.01" value="{{ multa_por_dia }}"
-                    required>
-            </div>
-            <button type="submit" class="btn">Salvar</button>
-        </form>
+            <h3>Configuração de Multa</h3>
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="form-action" value="salvar-multa">
+                <div class="form-group">
+                    <label for="valor-multa">Valor por dia (R$):</label>
+                    <input type="number" id="valor-multa" name="multa-por-dia" step="0.01" value="{{ multa_por_dia }}"
+                        required>
+                </div>
+                <button type="submit" class="btn">Salvar</button>
+            </form>
         </div>
     </main>
+
+    {% if messages %}
+    <div id="modal-feedback" class="modal" style="display: flex;">
+        <div class="modal-conteudo" id="conteudo-feedback">
+            <span class="fechar-modal" onclick="fecharModalFeedback()">&times;</span>
+            {% for message in messages %}
+            <p class="mensagem-feedback {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+            <button class="btn-voltar-modal" onclick="fecharModalFeedback()">Fechar</button>
+        </div>
+    </div>
+    {% endif %}
 
     <script src="{% static 'script/script.js' %}"></script>
 

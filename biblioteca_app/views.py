@@ -171,7 +171,6 @@ def cadastro_livros(request):
             capa=request.FILES.get('capa') 
         )
         messages.success(request, 'Livro cadastrado com sucesso!')
-        return redirect('home')
     
     context = {
         'quantidades': range(1, 51)
@@ -238,7 +237,7 @@ def cadastro_leitor(request):
         novo_leitor.save()
         
         messages.success(request, 'Leitor cadastrado com sucesso!')
-        return redirect('leitores')
+        return redirect('cadastro_leitor')
     
     return render(request, 'cadastro_leitor.html')
 
@@ -365,6 +364,9 @@ def reservas(request):
 def calcular_multa(request):
     emprestimo_id = request.GET.get('emprestimo_id')
     data_entrega_str = request.GET.get('data_entrega') 
+    emprestimos_ativos = Emprestimo.objects.exclude(
+        pk__in=Devolucao.objects.values('emprestimo_id')
+    ).order_by('data_devolucao')
 
     try:
         emprestimo = get_object_or_404(Emprestimo, pk=emprestimo_id)
@@ -397,14 +399,15 @@ def devolver_livro(request, emprestimo_id):
         data_entrega = datetime.date.fromisoformat(request.POST.get('data_entrega'))
         valor_multa = decimal.Decimal(request.POST.get('valor_multa', '0.00'))
 
-        devolucao = Devolucao.objects.create(
+        Devolucao.objects.create(
             emprestimo=emprestimo,
             data_devolucao_real=data_entrega,
             valor_multa=valor_multa
         )
+        emprestimo.save() 
+
 
         messages.success(request, f'Devolução do livro "{emprestimo.livro.titulo}" registrada. Multa: R$ {valor_multa:.2f}')
-
         return redirect('reservas')
 
     return redirect('reservas')
