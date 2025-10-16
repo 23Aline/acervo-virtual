@@ -238,7 +238,7 @@ def cadastro_leitor(request):
         novo_leitor.save()
         
         messages.success(request, 'Leitor cadastrado com sucesso!')
-        return redirect('usuarios')
+        return redirect('leitores')
     
     return render(request, 'cadastro_leitor.html')
 
@@ -254,9 +254,9 @@ def editar_leitor(request, leitor_id):
         leitor.cidade = request.POST.get('cidade-edicao')
         leitor.save()
         messages.success(request, f'Dados de "{leitor.nome}" atualizados.')
-        return redirect('usuarios')
+        return redirect('leitores')
     
-    return redirect('usuarios')
+    return redirect('leitores')
 
 @require_POST 
 def excluir_leitor(request, leitor_id):
@@ -267,14 +267,14 @@ def excluir_leitor(request, leitor_id):
         messages.success(request, f'O leitor "{nome_leitor}" foi excluído com sucesso.')
     except IntegrityError:
         messages.error(request, f'Não é possível excluir o leitor "{leitor.nome}" pois ele possui empréstimos ativos.')
-    return redirect('usuarios')
+    return redirect('leitores')
 
 def usuarios(request):
     leitores = Leitor.objects.all()
     context = {
         'leitores': leitores
     }
-    return render(request, 'usuarios.html', context)
+    return render(request, 'leitores.html', context)
 
 def emprestimo(request):
     if request.method == 'POST':
@@ -431,7 +431,7 @@ def multa(request):
         'devolucoes': devolucoes_com_multa
     }
 
-    return render(request, 'multa.html', context)
+    return render(request, 'relatorio_multa.html', context)
 
 def buscar_leitor(request):
     cpf = request.GET.get('cpf', '').strip()

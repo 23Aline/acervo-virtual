@@ -1,18 +1,18 @@
 .configuracoes-main {
-    display: flex;
-    max-width: 1000px;
-    margin: 10px auto;
     border-radius: 8px;
-    margin-left: 150px;
-}
-
-.configuracoes-main p {
-    font-size: 20px;
+    padding-top: 100px; 
+    padding-left: 30px; 
 }
 
 .configuracoes-conteudo {
     flex-grow: 1;
     padding: 30px;
+    max-width: 900px; 
+    margin: 0 auto; 
+}
+
+.configuracoes-main p {
+    font-size: 20px;
 }
 
 .config-content {

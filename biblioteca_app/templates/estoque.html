@@ -42,7 +42,7 @@
                 <a href="#"> Leitores</a>
                 <ul class="submenu">
                     <li><a href="{% url 'cadastro_leitor' %}">Cadastro de Leitor</a></li>
-                    <li><a href="{% url 'usuarios' %}">Leitores</a></li>
+                    <li><a href="{% url 'leitores' %}">Leitores</a></li>
                 </ul>
             </li>
             {% if request.session.funcao == "administrador" %}
@@ -168,6 +168,11 @@
 
 
     <script src="{% static 'script/script.js' %}"></script>
+
+    <footer class="footer">
+        <p>&copy; 2025 Acervo Digital - Todos os direitos reservados.</p>
+        <p>Desenvolvido por <span class="autor">Grupo 12</span></p>
+    </footer>
 </body>
 
 </html>
