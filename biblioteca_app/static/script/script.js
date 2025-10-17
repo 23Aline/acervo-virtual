@@ -1,4 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
+
+    const toggleSenha = document.getElementById('toggleSenha');
+    const inputSenha = document.getElementById('password');
+
+    toggleSenha.addEventListener('click', () => {
+        const tipo = inputSenha.getAttribute('type') === 'password' ? 'text' : 'password';
+        inputSenha.setAttribute('type', tipo);
+
+        toggleSenha.classList.toggle('fa-eye');
+        toggleSenha.classList.toggle('fa-eye-slash');
+    });
+
     const botoesExcluir = document.querySelectorAll(".btn-excluir");
     botoesExcluir.forEach(botao => {
         botao.addEventListener("click", e => {
@@ -417,13 +429,10 @@ document.addEventListener('DOMContentLoaded', function () {
 window.fecharModalFeedback = function () {
     const modal1 = document.getElementById("modal-feedback");
     if (modal1) { modal1.style.display = "none"; }
-
-    const modal2 = document.getElementById("modall-feedback");
-    if (modal2) { modal2.style.display = "none"; }
 }
 
 window.abrirModalFeedback = function (mensagem = null, tipo = null) {
-    const modal = document.getElementById("modal-feedback") || document.getElementById("modall-feedback");
+    const modal = document.getElementById("modal-feedback");
     const conteudo = document.getElementById("conteudo-feedback");
 
     if (mensagem && conteudo) {

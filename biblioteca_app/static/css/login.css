@@ -4,7 +4,6 @@ body.login-page {
     margin-top: -100px;
     min-height: 100vh;
     display: flex;
-    /* MUDANÇA ESSENCIAL: Define o fundo de toda a página como verde para cobrir o espaço branco inferior */
     background-color: #9ABF80;
 }
 
@@ -100,6 +99,27 @@ ul.messages {
     text-decoration: underline;
 }
 
+.form-group {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group i {
+    position: absolute;
+    right: 12px;
+    top: 35px;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
 /*RESPONSIVE*/
 @media (max-width: 768px) {
     body.login-page {
@@ -168,5 +188,14 @@ ul.messages {
         padding: 12px;
         font-size: 1.1em;
         margin-top: 20px;
+    }
+
+    .form-group i {
+        position: absolute;
+        right: 12px;
+        top: 45px;
+        color: #888;
+        cursor: pointer;
+        transition: color 0.2s;
     }
 }

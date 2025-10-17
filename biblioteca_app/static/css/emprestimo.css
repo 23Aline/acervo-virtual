@@ -58,6 +58,9 @@
     height: 500px;
     white-space: nowrap;
     background-color: #E5E3D4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 
 .emprestimo-form-container {
@@ -76,7 +79,7 @@
 .livro-info-text {
     font-size: 20px;
     margin: 5px 0;
-    margin-top: -8px;
+    margin-top: 5px;
 }
 
 #leitor-nome,
