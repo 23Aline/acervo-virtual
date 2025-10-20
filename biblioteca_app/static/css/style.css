@@ -102,6 +102,10 @@
     display: block;
 }
 
+.has-submenu:hover > .submenu {
+    display: block;
+}
+
 .footer {
     background-color: #9ABF80;
     color: #fff;
@@ -330,7 +334,7 @@ html {
         font-size: 24px;
         cursor: pointer;
         margin-right: 40px;
-        z-index: 1020;
+        z-index: 10000;
         overflow-y: auto;
     }
 

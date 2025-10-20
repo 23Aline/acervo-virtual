@@ -3,13 +3,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const toggleSenha = document.getElementById('toggleSenha');
     const inputSenha = document.getElementById('password');
 
-    toggleSenha.addEventListener('click', () => {
-        const tipo = inputSenha.getAttribute('type') === 'password' ? 'text' : 'password';
-        inputSenha.setAttribute('type', tipo);
+    if (toggleSenha && inputSenha) {
+        toggleSenha.addEventListener('click', () => {
+            const tipo = inputSenha.getAttribute('type') === 'password' ? 'text' : 'password';
+            inputSenha.setAttribute('type', tipo);
 
-        toggleSenha.classList.toggle('fa-eye');
-        toggleSenha.classList.toggle('fa-eye-slash');
-    });
+            toggleSenha.classList.toggle('fa-eye');
+            toggleSenha.classList.toggle('fa-eye-slash');
+        });
+    }
 
     const botoesExcluir = document.querySelectorAll(".btn-excluir");
     botoesExcluir.forEach(botao => {
@@ -34,21 +36,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     hasSubmenuItems.forEach(item => {
         item.addEventListener('click', function (event) {
-
-            if (window.innerWidth <= 768) {
-                event.preventDefault();
-            }
-
             const parentLi = this.parentElement;
 
-            parentLi.classList.toggle('open');
+            if (window.innerWidth <= 768 && this.getAttribute('href') === '#') {
+                event.preventDefault();
+                parentLi.classList.toggle('open');
 
-            const allHasSubmenus = document.querySelectorAll('.has-submenu');
-            allHasSubmenus.forEach(otherItem => {
-                if (otherItem !== parentLi && otherItem.classList.contains('open')) {
-                    otherItem.classList.remove('open');
-                }
-            });
+                document.querySelectorAll('.has-submenu').forEach(otherItem => {
+                    if (otherItem !== parentLi && otherItem.classList.contains('open')) {
+                        otherItem.classList.remove('open');
+                    }
+                });
+            }
         });
     });
 
@@ -371,25 +370,6 @@ document.addEventListener('DOMContentLoaded', function () {
     btnPago?.addEventListener("click", () => {
         valorMultaHidden.value = "0.00";
         valorMultaP.textContent = "0.00";
-    });
-
-    formDevolucao?.addEventListener("submit", (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(formDevolucao);
-
-        fetch(formDevolucao.action, {
-            method: 'POST',
-            body: formData
-        })
-            .then(res => {
-                if (res.redirected) {
-                    window.location.href = res.url;
-                } else {
-                    window.location.reload();
-                }
-            })
-            .catch(err => console.error(err));
     });
 
     /*MODAL DE EDIÇÃO DE CONTA*/

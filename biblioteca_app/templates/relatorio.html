@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/relatorio.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         crossorigin="anonymous" />
     <title>Reservas</title>
@@ -49,7 +49,7 @@
                 <a href="#">Relatórios</a>
                 <ul class="submenu">
                     <li><a href="{% url 'multa' %}">Relatório de Multas</a></li>
-                    <li><a href="{% url 'emprestimo' %}">Relatório de Empréstimos</a></li>
+                    <li><a href="{% url 'relatorio' %}">Relatório de Empréstimos</a></li>
                 </ul>
             </li>
             <li class="has-submenu">
@@ -71,7 +71,58 @@
     </nav>
 
     <main>
+        <div class="relatorio-header">
+            <h2>Relatório de Empréstimos</h2>
+            <h3>Estatísticas de uso do acervo:</p>
+        </div>
 
+        <div class="dashboard-stats">
+            <div class="stat-card total-emprestimos">
+                <h3>Empréstimos Registrados (Total)</h3>
+                <p>{{ total_emprestimos_feitos }}</p>
+            </div>
+
+            <div class="stat-card total-devolvidos">
+                <h3>Livros Devolvidos</h3>
+                <p>{{ total_devolvidos }}</p>
+            </div>
+
+            <div class="stat-card percentual-devolvidos">
+                <h3>Taxa de Devolução Concluída</h3>
+                <p>{{ percentual_devolvidos }}%</p>
+            </div>
+        </div>
+
+        <div class="relatorio-header">
+            <h2>Contagem de Empréstimos por Livro</h3>
+        </div>
+
+        <div class="estoque-container">
+            <table class="tabela-relatorio">
+                <thead>
+                    <tr>
+                        <th>Livro</th>
+                        <th>Autor</th>
+                        <th>Gênero</th>
+                        <th>Emprestados (Total)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for livro in livros_emprestados %}
+                    <tr>
+                        <td>{{ livro.titulo }}</td>
+                        <td>{{ livro.autor }}</td>
+                        <td>{{ livro.genero }}</td>
+                        <td class="count-col">{{ livro.total_emprestimos }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">Nenhum livro foi emprestado ainda.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </main>
 
     <script src="{% static 'script/script.js' %}"></script>

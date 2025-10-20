@@ -49,7 +49,7 @@
                 <a href="#">Relatórios</a>
                 <ul class="submenu">
                     <li><a href="{% url 'multa' %}">Relatório de Multas</a></li>
-                    <li><a href="{% url 'emprestimo' %}">Relatório de Empréstimos</a></li>
+                    <li><a href="{% url 'relatorio' %}">Relatório de Empréstimos</a></li>
                 </ul>
             </li>
             <li class="has-submenu">
@@ -139,23 +139,6 @@
                 <p id="mensagem-indisponivel"></p>
                 <div class="modal-botoes">
                     <button type="button" class="btn btn-voltar-modal" onclick="fecharModalErro()">Voltar</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="modal-sucesso" class="modal">
-            <div class="modal-conteudo">
-                <span class="fechar-modal-sucesso">&times;</span>
-                <h3>Empréstimo realizado com sucesso!</h3>
-                <p id="mensagem-sucesso">
-                    {% for message in messages %}
-                    {% if 'sucesso' in message.tags %}
-                    {{ message }}
-                    {% endif %}
-                    {% endfor %}
-                </p>
-                <div class="modal-botoes">
-                    <button type="button" class="btn btn-fechar-modal-sucesso">Fechar</button>
                 </div>
             </div>
         </div>

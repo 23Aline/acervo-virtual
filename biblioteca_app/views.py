@@ -338,11 +338,11 @@ def emprestimo_com_livro(request, livro_id):
     }
     return render(request, 'emprestimo.html', context)
 
-from datetime import date
-import decimal
-
 def reservas(request):
-    emprestimos_ativos = Emprestimo.objects.filter(devolucao__isnull=True).order_by('data_devolucao')
+    emprestimos_ativos = Emprestimo.objects.exclude(
+        pk__in=Devolucao.objects.values('emprestimo_id')
+    ).order_by('data_devolucao')
+    
     hoje = date.today()
 
     config = Configuracao.objects.first()
@@ -393,24 +393,33 @@ def calcular_multa(request):
         return JsonResponse({'erro': str(e)}, status=500)
 
 def devolver_livro(request, emprestimo_id):
-    emprestimo = get_object_or_404(Emprestimo, pk=emprestimo_id)
+    if request.method == "POST":
+        emprestimo = get_object_or_404(Emprestimo, pk=emprestimo_id)
 
-    if request.method == 'POST':
-        data_entrega = datetime.date.fromisoformat(request.POST.get('data_entrega'))
-        valor_multa = decimal.Decimal(request.POST.get('valor_multa', '0.00'))
+        data_entrega_str = request.POST.get("data_entrega")
+        valor_multa_str = request.POST.get("valor_multa", "0.00")
 
-        Devolucao.objects.create(
+        try:
+            data_entrega = datetime.strptime(data_entrega_str, "%Y-%m-%d").date()
+        except ValueError:
+            messages.error(request, "Data de entrega inválida.")
+            return redirect("reservas")
+
+        devolucao = Devolucao.objects.create(
             emprestimo=emprestimo,
             data_devolucao_real=data_entrega,
-            valor_multa=valor_multa
+            valor_multa=decimal.Decimal(valor_multa_str)
         )
-        emprestimo.save() 
 
+        emprestimo.devolvido = True  
+        emprestimo.devolucao = devolucao
+        emprestimo.save()
 
-        messages.success(request, f'Devolução do livro "{emprestimo.livro.titulo}" registrada. Multa: R$ {valor_multa:.2f}')
-        return redirect('reservas')
+        messages.success(request, f"O livro '{emprestimo.livro.titulo}' foi devolvido com sucesso!")
+        return redirect("reservas")
 
-    return redirect('reservas')
+    messages.error(request, "Método inválido para devolução.")
+    return redirect("reservas")
 
 @admin_required
 def multa(request):
@@ -552,3 +561,27 @@ def buscar_livro_completo(request):
         return JsonResponse(response_data)
     except Exception as e:
         return JsonResponse({'erro': str(e)}, status=500)
+
+def relatorio(request):
+    livros_emprestados = Livro.objects.annotate(
+        total_emprestimos=Count('emprestimo') 
+    ).order_by('-total_emprestimos', 'titulo')
+
+    livros_emprestados = livros_emprestados.filter(total_emprestimos__gt=0) 
+    total_emprestimos_feitos = Emprestimo.objects.count()
+    total_devolvidos = Devolucao.objects.count()
+
+    percentual_devolvidos = 0
+    if total_emprestimos_feitos > 0:
+        percentual_devolvidos = (total_devolvidos / total_emprestimos_feitos) * 100
+        usuario_ativo = request.user 
+
+
+    context = {
+        'livros_emprestados': livros_emprestados, 
+        'total_emprestimos_feitos': total_emprestimos_feitos,
+        'total_devolvidos': total_devolvidos,
+        'percentual_devolvidos': f'{percentual_devolvidos:.2f}', 
+        'bibliotecario_nome': usuario_ativo.get_full_name() or usuario_ativo.username,
+    }
+    return render(request, 'relatorio.html', context)
