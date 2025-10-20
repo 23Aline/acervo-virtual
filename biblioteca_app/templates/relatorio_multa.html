@@ -95,13 +95,13 @@
             <div class="relatorio-header">
                 <h2>Multas ativas</h2>
             </div>
-                    <div class="buscador">
-            <form action="{% url 'multa' %}" method="GET" class="pesquisa">
-                <input type="text" name="q" value="{{ request.GET.q }}"
-                    placeholder="Pesquisar por título ou autor..." id="buscar">
-                <button type="submit"><i class="fa fa-search"></i></button>
-            </form>
-        </div>
+            <div class="buscador">
+                <form action="{% url 'multa' %}" method="GET" class="pesquisa">
+                    <input type="text" name="q" value="{{ request.GET.q }}"
+                        placeholder="Pesquisar por título ou autor..." id="buscar">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
             <table class="tabela-multa">
                 <thead>
                     <tr>

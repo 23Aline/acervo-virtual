@@ -211,32 +211,67 @@ def excluir_livro(request, livro_id):
     return redirect('estoque')
 
 def estoque(request):
-    livros_cadastrados = Livro.objects.annotate(
+    query = request.GET.get('q') 
+    
+    if query:
+        livros_base = Livro.objects.filter(
+            Q(titulo__icontains=query) |
+            Q(autor__icontains=query) | 
+            Q(genero__icontains=query)  
+        ).distinct()
+    else:
+        livros_base = Livro.objects.all()
+
+    livros_cadastrados = livros_base.annotate(
         emprestados=Count('emprestimo', filter=Q(emprestimo__devolucao__isnull=True))
     ).annotate(
         disponiveis=F('quantidade') - F('emprestados') 
     )
+    
     context = {
-        'livros': livros_cadastrados
+        'livros': livros_cadastrados,
+        'query': query, 
     }
     return render(request, 'estoque.html', context)
 
 def cadastro_leitor(request):
     if request.method == 'POST':
+        email_post = request.POST.get('email')
+        cpf_post = request.POST.get('cpf') 
+        
+        cpf_limpo = ''.join(filter(str.isdigit, cpf_post)) 
+
+        if len(cpf_limpo) != 11:
+            messages.error(request, 'O CPF deve conter exatamente 11 dígitos.', extra_tags="erro")
+            return redirect('cadastro_leitor')
+ 
+        if Leitor.objects.filter(email=email_post).exists():
+            messages.error(request, 'Este endereço de e-mail já está cadastrado para outro leitor.', extra_tags="erro")
+            return redirect('cadastro_leitor')
+        
+        if Leitor.objects.filter(cpf=cpf_limpo).exists():
+            messages.error(request, 'Este CPF já está cadastrado para outro leitor.', extra_tags="erro")
+            return redirect('cadastro_leitor')
+
+
         novo_leitor = Leitor()
         novo_leitor.nome = request.POST.get('nome')
         novo_leitor.data_nascimento = request.POST.get('data_nascimento')
         novo_leitor.celular = request.POST.get('celular')
-        novo_leitor.cpf = request.POST.get('cpf')
-        novo_leitor.email = request.POST.get('email')
+        novo_leitor.cpf = cpf_limpo
+        novo_leitor.email = email_post
         novo_leitor.cep = request.POST.get('cep')
         novo_leitor.endereco = request.POST.get('endereco')
         novo_leitor.complemento = request.POST.get('complemento')
         novo_leitor.cidade = request.POST.get('cidade')
         novo_leitor.recebimento_alertas = 'recebimento_alertas' in request.POST
-        novo_leitor.save()
         
-        messages.success(request, 'Leitor cadastrado com sucesso!')
+        try:
+            novo_leitor.save()
+            messages.success(request, 'Leitor cadastrado com sucesso!', extra_tags="sucesso")
+        except IntegrityError:
+            messages.error(request, 'Erro de integridade no banco de dados (Ex: CPF ou Email duplicado).', extra_tags="erro")
+        
         return redirect('cadastro_leitor')
     
     return render(request, 'cadastro_leitor.html')
@@ -269,23 +304,39 @@ def excluir_leitor(request, leitor_id):
     return redirect('leitores')
 
 def usuarios(request):
-    leitores = Leitor.objects.all()
+    query = request.GET.get('q')
+    
+    if query:
+        leitores = Leitor.objects.filter(
+            Q(nome__icontains=query) |
+            Q(email__icontains=query)
+        ).distinct()
+    else:
+        leitores = Leitor.objects.all()
+
     context = {
-        'leitores': leitores
+        'leitores': leitores,
+        'query': query, 
     }
     return render(request, 'leitores.html', context)
 
 def emprestimo(request):
     if request.method == 'POST':
-        cpf = request.POST.get('cpf')
+        cpf_post = request.POST.get('cpf') 
         titulo_livro = request.POST.get('livro')
         data_emprestimo_str = request.POST.get('data_emprestimo')
         data_devolucao_str = request.POST.get('data_devolucao')
 
-        if not all([cpf, titulo_livro, data_emprestimo_str, data_devolucao_str]):
+        if not all([cpf_post, titulo_livro, data_emprestimo_str, data_devolucao_str]):
             messages.error(request, "Todos os campos são obrigatórios.", extra_tags="erro")
             return redirect('emprestimo')
 
+        cpf_limpo = ''.join(filter(str.isdigit, cpf_post))
+
+        if len(cpf_limpo) != 11:
+            messages.error(request, 'Erro no CPF.', extra_tags="erro")
+            return redirect('emprestimo')
+        
         try:
             data_emprestimo_obj = datetime.strptime(data_emprestimo_str, '%Y-%m-%d').date()
             data_devolucao_obj = datetime.strptime(data_devolucao_str, '%Y-%m-%d').date()
@@ -302,7 +353,7 @@ def emprestimo(request):
             return redirect('emprestimo')
 
         try:
-            leitor = Leitor.objects.get(cpf=cpf)
+            leitor = Leitor.objects.get(cpf=cpf_limpo) 
         except Leitor.DoesNotExist:
             messages.error(request, "Leitor não encontrado.", extra_tags="erro")
             return redirect('emprestimo')
@@ -347,10 +398,21 @@ def emprestimo_com_livro(request, livro_id):
     return render(request, 'emprestimo.html', context)
 
 def reservas(request):
-    emprestimos_ativos = Emprestimo.objects.exclude(
-        pk__in=Devolucao.objects.values('emprestimo_id')
-    ).order_by('data_devolucao')
+    query = request.GET.get('q') 
     
+    emprestimos_base = Emprestimo.objects.exclude(
+        pk__in=Devolucao.objects.values('emprestimo_id')
+    )
+    
+    if query:
+        emprestimos_ativos = emprestimos_base.filter(
+            Q(livro__titulo__icontains=query) |
+            Q(livro__autor__icontains=query) |
+            Q(leitor__nome__icontains=query)
+        ).order_by('data_devolucao')
+    else:
+        emprestimos_ativos = emprestimos_base.order_by('data_devolucao')
+
     hoje = date.today()
 
     config = Configuracao.objects.first()
@@ -649,7 +711,6 @@ def relatorio(request):
         'total_emprestimos_feitos': total_emprestimos_feitos,
         'total_devolvidos': total_devolvidos,
         'percentual_devolvidos': f'{percentual_devolvidos:.2f}', 
-        'bibliotecario_nome': usuario_ativo.get_full_name() or usuario_ativo.username,
         'query': query, 
     }
     return render(request, 'relatorio.html', context)

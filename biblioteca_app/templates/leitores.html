@@ -73,6 +73,13 @@
     <main>
         <div class="estoque-container">
             <h2>Leitores</h2>
+            <div class="buscador">
+                <form action="{% url 'leitores' %}" method="GET" class="pesquisa">
+                    <input type="text" name="q" value="{{ request.GET.q }}"
+                        placeholder="Pesquisar por leitor ou email..." id="buscar">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
             <table class="tabela-estoque">
                 <thead>
                     <tr>

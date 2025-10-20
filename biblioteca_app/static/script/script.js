@@ -91,23 +91,29 @@ document.addEventListener('DOMContentLoaded', function () {
 
         cpfInput.addEventListener('blur', () => {
             const cpf = cpfInput.value.replace(/\D/g, '');
-            if (cpf.length === 11) {
-                fetch(`/api/leitor/buscar/?cpf=${cpf}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.erro) throw new Error(data.erro);
-                        leitorNomeDisplay.innerText = data.nome;
-                        multaInfoDisplay.innerText = data.tem_multa ? 'Possui multa por atraso' : 'Não possui multas';
-                    })
-                    .catch(error => {
-                        leitorNomeDisplay.innerText = error.message;
-                        multaInfoDisplay.innerText = 'N/A';
-                        console.error('Erro:', error);
-                    });
-            } else {
-                leitorNomeDisplay.innerText = '';
+
+            if (cpf.length !== 11) {
+                leitorNomeDisplay.innerText = '❌ Erro: CPF deve ter 11 dígitos.';
+                leitorNomeDisplay.style.color = '#b14942'; 
                 multaInfoDisplay.innerText = '';
+                return; 
             }
+            leitorNomeDisplay.style.color = 'inherit';
+            leitorNomeDisplay.innerText = 'Buscando...';
+
+            fetch(`/api/leitor/buscar/?cpf=${cpf}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.erro) throw new Error(data.erro);
+                    leitorNomeDisplay.innerText = data.nome;
+                    multaInfoDisplay.innerText = data.tem_multa ? 'Possui multa por atraso' : 'Não possui multas';
+                })
+                .catch(error => {
+                    leitorNomeDisplay.innerText = error.message;
+                    leitorNomeDisplay.style.color = '#b14942';
+                    multaInfoDisplay.innerText = 'N/A';
+                    console.error('Erro:', error);
+                });
         });
     }
 

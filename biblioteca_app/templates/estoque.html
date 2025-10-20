@@ -73,41 +73,48 @@
     <main>
         <div class="estoque-container">
             <h2>Estoque</h2>
+            <div class="buscador">
+                <form action="{% url 'estoque' %}" method="GET" class="pesquisa">
+                    <input type="text" name="q" value="{{ request.GET.q }}"
+                        placeholder="Pesquisar por título ou autor..." id="buscar">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </div>
             <table class="tabela-estoque">
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Autor</th>
-                        <th>Total</th>
-                        <th>Disponíveis</th>
-                        <th>Emprestados</th>
-                        <th>Ação</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for livro in livros %}
-                    <tr data-livro-id="{{ livro.id }}" data-livro-titulo="{{ livro.titulo }}"
-                        data-autor="{{ livro.autor }}" data-genero="{{ livro.genero }}" data-edicao="{{ livro.edicao }}"
-                        data-numero-paginas="{{ livro.numero_paginas }}" data-classificacao="{{ livro.classificacao }}"
-                        data-sinopse="{{ livro.sinopse }}" data-quantidade="{{ livro.quantidade }}"
-                        data-capa="{% if livro.capa %}{{ livro.capa.url }}{% endif %}">
-                        <td>{{ livro.titulo }}</td>
-                        <td>{{ livro.autor }}</td>
-                        <td>{{ livro.quantidade }}</td>
-                        <td>{{ livro.disponiveis }}</td>
-                        <td>{{ livro.emprestados }}</td>
-                        <td class="botoes-acao">
-                            <button class="btn-editar">Editar</button>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Autor</th>
+                    <th>Total</th>
+                    <th>Disponíveis</th>
+                    <th>Emprestados</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for livro in livros %}
+                <tr data-livro-id="{{ livro.id }}" data-livro-titulo="{{ livro.titulo }}" data-autor="{{ livro.autor }}"
+                    data-genero="{{ livro.genero }}" data-edicao="{{ livro.edicao }}"
+                    data-numero-paginas="{{ livro.numero_paginas }}" data-classificacao="{{ livro.classificacao }}"
+                    data-sinopse="{{ livro.sinopse }}" data-quantidade="{{ livro.quantidade }}"
+                    data-capa="{% if livro.capa %}{{ livro.capa.url }}{% endif %}">
+                    <td>{{ livro.titulo }}</td>
+                    <td>{{ livro.autor }}</td>
+                    <td>{{ livro.quantidade }}</td>
+                    <td>{{ livro.disponiveis }}</td>
+                    <td>{{ livro.emprestados }}</td>
+                    <td class="botoes-acao">
+                        <button class="btn-editar">Editar</button>
 
-                            <form method="POST" action="{% url 'excluir_livro' livro.id %}" style="display:inline;">
-                                {% csrf_token %}
-                                <button type="submit" class="btn-excluir">Excluir</button>
-                            </form>
-                        </td>
-                    </tr>
+                        <form method="POST" action="{% url 'excluir_livro' livro.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-excluir">Excluir</button>
+                        </form>
+                    </td>
+                </tr>
 
-                    {% endfor %}
-                </tbody>
+                {% endfor %}
+            </tbody>
             </table>
         </div>
 
