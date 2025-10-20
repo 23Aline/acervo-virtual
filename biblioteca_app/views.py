@@ -1,4 +1,4 @@
-from django.db.models import Q, Count, F
+from django.db.models import Q, Count, F, Sum
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
@@ -292,6 +292,14 @@ def emprestimo(request):
         except ValueError:
             messages.error(request, "Formato de data inválido.", extra_tags="erro")
             return redirect('emprestimo')
+            
+        if data_devolucao_obj < data_emprestimo_obj:
+            messages.error(
+                request, 
+                "A data de devolução não pode ser anterior à data de empréstimo.", 
+                extra_tags="erro"
+            )
+            return redirect('emprestimo')
 
         try:
             leitor = Leitor.objects.get(cpf=cpf)
@@ -395,9 +403,8 @@ def calcular_multa(request):
 def devolver_livro(request, emprestimo_id):
     if request.method == "POST":
         emprestimo = get_object_or_404(Emprestimo, pk=emprestimo_id)
-
         data_entrega_str = request.POST.get("data_entrega")
-        valor_multa_str = request.POST.get("valor_multa", "0.00")
+        valor_multa_post_str = request.POST.get("valor_multa", "0.00") 
 
         try:
             data_entrega = datetime.strptime(data_entrega_str, "%Y-%m-%d").date()
@@ -405,13 +412,39 @@ def devolver_livro(request, emprestimo_id):
             messages.error(request, "Data de entrega inválida.")
             return redirect("reservas")
 
+        config = Configuracao.objects.first()
+        valor_por_dia = decimal.Decimal(str(config.multa_por_dia)) if config else decimal.Decimal('2.50') 
+        dias_atraso = (data_entrega - emprestimo.data_devolucao).days
+        
+        if dias_atraso > 0:
+            multa_devida = valor_por_dia * dias_atraso
+        else:
+            multa_devida = decimal.Decimal('0.00')
+
+        multa_foi_paga = False
+        valor_a_registrar = multa_devida 
+        
+        if multa_devida > 0:
+            if valor_multa_post_str == "0.00":
+                multa_foi_paga = True 
+                
+            else:
+                multa_foi_paga = False 
+                valor_a_registrar = decimal.Decimal(valor_multa_post_str)
+
+        else:
+            multa_foi_paga = True
+            valor_a_registrar = decimal.Decimal('0.00')
+
+
         devolucao = Devolucao.objects.create(
             emprestimo=emprestimo,
             data_devolucao_real=data_entrega,
-            valor_multa=decimal.Decimal(valor_multa_str)
+            valor_multa=valor_a_registrar, 
+            multa_paga=multa_foi_paga 
         )
 
-        emprestimo.devolvido = True  
+        emprestimo.devolvido = True 
         emprestimo.devolucao = devolucao
         emprestimo.save()
 
@@ -423,24 +456,47 @@ def devolver_livro(request, emprestimo_id):
 
 @admin_required
 def multa(request):
+    query = request.GET.get('q')
+    
+    if query:
+        livros_base = Livro.objects.filter(
+            Q(titulo__icontains=query) |
+            Q(autor__icontains=query) | 
+            Q(genero__icontains=query)  
+        ).distinct()
+    else:
+        livros_base = Livro.objects.all()
+
     config = Configuracao.objects.first()
     valor_por_dia = config.multa_por_dia if config else decimal.Decimal('2.50')
 
     devolucoes_com_multa = []
-
     hoje = date.today()
-
-    emprestimos_atrasados = Emprestimo.objects.filter(data_devolucao__lt=hoje, devolucao__isnull=True)
+    
+    emprestimos_atrasados = Emprestimo.objects.filter(
+        data_devolucao__lt=hoje, 
+        devolucao__isnull=True
+    )
+    
+    total_multas_aberto = decimal.Decimal('0.00')
 
     for emprestimo in emprestimos_atrasados:
         dias_atraso = (hoje - emprestimo.data_devolucao).days
         valor_multa_temp = dias_atraso * valor_por_dia
-
+        total_multas_aberto += valor_multa_temp 
         emprestimo.valor_multa_temp = valor_multa_temp
         devolucoes_com_multa.append(emprestimo)
 
+    multas_arrecadadas_valor = Devolucao.objects.aggregate(
+        total_arrecadado=Sum('valor_multa') 
+    )['total_arrecadado']
+    
+    multas_arrecadadas = multas_arrecadadas_valor if multas_arrecadadas_valor else decimal.Decimal('0.00')
+
     context = {
-        'devolucoes': devolucoes_com_multa
+        'devolucoes': devolucoes_com_multa,
+        'total_multas_aberto': total_multas_aberto,
+        'multas_arrecadadas': multas_arrecadadas,
     }
 
     return render(request, 'relatorio_multa.html', context)
@@ -563,7 +619,18 @@ def buscar_livro_completo(request):
         return JsonResponse({'erro': str(e)}, status=500)
 
 def relatorio(request):
-    livros_emprestados = Livro.objects.annotate(
+    query = request.GET.get('q')
+    
+    if query:
+        livros_base = Livro.objects.filter(
+            Q(titulo__icontains=query) |
+            Q(autor__icontains=query) | 
+            Q(genero__icontains=query)  
+        ).distinct()
+    else:
+        livros_base = Livro.objects.all()
+
+    livros_emprestados = livros_base.annotate(
         total_emprestimos=Count('emprestimo') 
     ).order_by('-total_emprestimos', 'titulo')
 
@@ -574,8 +641,8 @@ def relatorio(request):
     percentual_devolvidos = 0
     if total_emprestimos_feitos > 0:
         percentual_devolvidos = (total_devolvidos / total_emprestimos_feitos) * 100
-        usuario_ativo = request.user 
-
+    
+    usuario_ativo = request.user 
 
     context = {
         'livros_emprestados': livros_emprestados, 
@@ -583,5 +650,6 @@ def relatorio(request):
         'total_devolvidos': total_devolvidos,
         'percentual_devolvidos': f'{percentual_devolvidos:.2f}', 
         'bibliotecario_nome': usuario_ativo.get_full_name() or usuario_ativo.username,
+        'query': query, 
     }
     return render(request, 'relatorio.html', context)

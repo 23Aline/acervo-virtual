@@ -72,7 +72,36 @@
 
     <main>
         <div class="estoque-container">
-            <h2>Relatório de multas</h2>
+            <div class="relatorio-header">
+                <h2>Relatório de Multas</h2>
+                <h3>Estatísticas de multas:</p>
+            </div>
+            <div class="dashboard-stats">
+                <div class="stat-card total-multas-aberto">
+                    <h3>Multa em Aberto (R$)</h3>
+                    <p>R$ {{ total_multas_aberto|floatformat:2 }}</p>
+                </div>
+
+                <div class="stat-card total-arrecadado">
+                    <h3>Total Arrecadado (R$)</h3>
+                    <p>R$ {{ multas_arrecadadas|floatformat:2 }}</p>
+                </div>
+
+                <div class="stat-card total-multas-ativas">
+                    <h3>Empréstimos com Multa</h3>
+                    <p>{{ devolucoes|length }}</p>
+                </div>
+            </div>
+            <div class="relatorio-header">
+                <h2>Multas ativas</h2>
+            </div>
+                    <div class="buscador">
+            <form action="{% url 'multa' %}" method="GET" class="pesquisa">
+                <input type="text" name="q" value="{{ request.GET.q }}"
+                    placeholder="Pesquisar por título ou autor..." id="buscar">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
             <table class="tabela-multa">
                 <thead>
                     <tr>

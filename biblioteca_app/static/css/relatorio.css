@@ -55,10 +55,6 @@
     border-bottom: 1px solid #ddd;
 }
 
-.tabela-relatorio tbody tr:hover {
-    background-color: #f6f6f6; 
-}
-
 .tabela-relatorio td {
     padding: 12px;
     font-size: 0.9rem;

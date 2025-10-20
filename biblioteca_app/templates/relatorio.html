@@ -96,7 +96,13 @@
         <div class="relatorio-header">
             <h2>Contagem de Empréstimos por Livro</h3>
         </div>
-
+        <div class="buscador">
+            <form action="{% url 'relatorio' %}" method="GET" class="pesquisa">
+                <input type="text" name="q" value="{{ request.GET.q }}"
+                    placeholder="Pesquisar por título, autor ou gênero..." id="buscar">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
         <div class="estoque-container">
             <table class="tabela-relatorio">
                 <thead>

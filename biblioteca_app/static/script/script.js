@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     btnPago?.addEventListener("click", () => {
         valorMultaHidden.value = "0.00";
-        valorMultaP.textContent = "0.00";
+        valorMultaP.textContent = "PAGO";
     });
 
     /*MODAL DE EDIÇÃO DE CONTA*/

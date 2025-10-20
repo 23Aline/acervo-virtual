@@ -142,24 +142,6 @@
                 </div>
             </div>
         </div>
-
-        <div id="modal-erro" class="modal">
-            <div class="modal-conteudo">
-                <span class="fechar-modal-erro">&times;</span>
-                <h3>Erro no Empréstimo</h3>
-                <p id="mensagem-erro">
-                    {% for message in messages %}
-                    {% if 'erro' in message.tags %}
-                    {{ message }}
-                    {% endif %}
-                    {% endfor %}
-                </p>
-                <div class="modal-botoes">
-                    <button type="button" class="btn btn-fechar-modal-erro">Fechar</button>
-                </div>
-            </div>
-        </div>
-
     </main>
 
     {% if messages %}
