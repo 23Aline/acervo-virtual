@@ -86,9 +86,14 @@ python manage.py runserver
 
 O projeto estará acessível no link disponível no terminal.
 
-3. Usuário e senha para o login:
+3. Usuário e senha para o login como Bibliotecario:
    
 - **Usuário**: acervo_virtual
+- **Senha**: Biblioteca123*
+
+4. Como Administrador:
+
+- **Usuário**: admin
 - **Senha**: Biblioteca123*
 
 
