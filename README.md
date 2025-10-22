@@ -7,7 +7,10 @@ Este é o projeto do sistema Acervo Digital para o Projeto Aplicado III, desenvo
 O sistema permite que bibliotecários e administradores gerenciem o cadastro de livros e leitores, controlando empréstimos, reservas, devoluções, multas e o estoque de livros. 
 A interface de usuário intuitiva facilita o acesso e a organização das informações, garantindo um controle eficiente do acervo.
 
----
+##  Link na plataforma SAGA:
+```bash
+https://plataforma.gpinovacao.senai.br/plataforma/demandas-da-industria/interna/11036
+```
 
 ##  Tecnologias Utilizadas
 - **Python**: Linguagem de programação principal.
