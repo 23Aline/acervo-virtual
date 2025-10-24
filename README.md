@@ -43,26 +43,6 @@ cd acervo_digital
 
 ---
 
-##  Configurar o Ambiente Virtual
-
-É uma boa prática criar um ambiente virtual para isolar as dependências do projeto.
-
-```bash
-python -m venv venv
-```
-
-Ative o ambiente virtual:
-- **Windows**
-```bash
-venv\Scripts\activate
-```
-- **macOS/Linux**
-```bash
-source venv/bin/activate
-```
-
----
-
 ## Instalar as Dependências
 
 Com o ambiente virtual ativado, instale todas as bibliotecas e dependências necessárias:
@@ -96,7 +76,7 @@ O projeto estará acessível no link disponível no terminal.
 
 4. Como Administrador:
 
-- **Usuário**: admin
+- **Usuário**: Admin
 - **Senha**: Biblioteca123*
 
 
