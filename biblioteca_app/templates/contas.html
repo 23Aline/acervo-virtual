@@ -91,8 +91,9 @@
                                 {% csrf_token %}
                                 <button type="submit" class="btn-excluir">Excluir</button>
                             </form>
-                            <button type="button" class="btn-editar"
-                                onclick="abrirModal('{{ usuario.id }}', '{{ usuario.email }}', '{{ usuario.perfil.cpf|default:'' }}', '{{ usuario.perfil.endereco|default:'' }}')">
+                            <button type="button" class="btn-editar" data-id="{{ usuario.id }}"
+                                data-email="{{ usuario.email }}" data-cpf="{{ usuario.perfil.cpf|default:'' }}"
+                                data-endereco="{{ usuario.perfil.endereco|default:'' }}">
                                 Editar
                             </button>
                         </td>
@@ -128,6 +129,7 @@
             </form>
         </div>
     </div>
+
     {% if messages %}
     <div id="modal-feedback" class="modal" style="display: flex;">
         <div class="modal-conteudo" id="conteudo-feedback">

@@ -92,21 +92,23 @@ def configuracao_contas(request):
         user = get_object_or_404(User, id=usuario_id)
 
         email = request.POST.get('email')
-        cpf = request.POST.get('cpf')
         endereco = request.POST.get('endereco')
+        perfil, created = PerfilUsuario.objects.get_or_create(user=user)
 
-        if email and cpf and endereco:
+        if email and endereco:
             user.email = email
             user.save()
-            perfil, created = PerfilUsuario.objects.get_or_create(user=user)
             perfil.email = email
-            perfil.cpf = cpf
             perfil.endereco = endereco
             perfil.save()
+            
             messages.success(request, 'Usuário atualizado com sucesso!')
+        else:
+            messages.error(request, 'Erro: E-mail e Endereço são obrigatórios.')
+            
         return redirect('configuracao_contas')
 
-    usuarios_cadastrados = User.objects.all()
+    usuarios_cadastrados = User.objects.all().select_related('perfil')
     return render(request, 'contas.html', {'usuarios_cadastrados': usuarios_cadastrados})
 
 @admin_required

@@ -94,9 +94,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (cpf.length !== 11) {
                 leitorNomeDisplay.innerText = '❌ Erro: CPF deve ter 11 dígitos.';
-                leitorNomeDisplay.style.color = '#b14942'; 
+                leitorNomeDisplay.style.color = '#b14942';
                 multaInfoDisplay.innerText = '';
-                return; 
+                return;
             }
             leitorNomeDisplay.style.color = 'inherit';
             leitorNomeDisplay.innerText = 'Buscando...';
@@ -304,6 +304,28 @@ document.addEventListener('DOMContentLoaded', function () {
             modalEdicaoLivro.style.display = "none";
         }
     });
+    
+    /*MODAL CONTAS*/
+    const btnsEditarConta = document.querySelectorAll('.configuracoes-main .btn-editar');
+    const modalEditar = document.getElementById("modal-editar");
+    const formEditar = modalEditar ? modalEditar.querySelector('form') : null;
+
+    if (btnsEditarConta.length > 0 && modalEditar && formEditar) {
+        btnsEditarConta.forEach(btn => {
+            btn.addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const email = this.getAttribute('data-email');
+                const endereco = this.getAttribute('data-endereco');
+
+                document.getElementById("usuario_id").value = id;
+                document.getElementById("modal-email").value = email;
+                document.getElementById("modal-endereco").value = endereco;
+
+                modalEditar.style.display = "flex";
+
+            });
+        });
+    }
 
     /*MODAL DE DEVOLUÇÃO*/
     const btnsDevolucao = document.querySelectorAll(".btn-devolucao");
@@ -433,3 +455,4 @@ window.abrirModalFeedback = function (mensagem = null, tipo = null) {
         modal.style.display = "flex";
     }
 }
+
