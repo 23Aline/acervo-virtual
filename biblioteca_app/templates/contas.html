@@ -44,7 +44,6 @@
                     <li><a href="{% url 'leitores' %}">Leitores</a></li>
                 </ul>
             </li>
-            {% if request.session.funcao == "administrador" %}
             <li class="has-submenu">
                 <a href="#">Relatórios</a>
                 <ul class="submenu">
@@ -52,6 +51,7 @@
                     <li><a href="{% url 'relatorio' %}">Relatório de Empréstimos</a></li>
                 </ul>
             </li>
+            {% if request.session.funcao == "administrador" %}
             <li class="has-submenu">
                 <a href="#">Configurações</a>
                 <ul class="submenu">
@@ -128,20 +128,18 @@
             </form>
         </div>
     </div>
-    <div id="modal-feedback" class="modal" style="display:none;">
-        <div class="modal-conteudo">
+    {% if messages %}
+    <div id="modal-feedback" class="modal" style="display: flex;">
+        <div class="modal-conteudo" id="conteudo-feedback">
             <span class="fechar-modal" onclick="fecharModalFeedback()">&times;</span>
-            <p id="modall-mensagem"></p>
+            {% for message in messages %}
+            <p class="mensagem-feedback {{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+            <button class="btn-voltar-modal" onclick="fecharModalFeedback()">Fechar</button>
         </div>
     </div>
-    <script id="django-mensagens" type="application/json">
-    [
-        {% for message in messages %}
-        {"tipo": "{{ message.tags }}", "mensagem": "{{ message }}" }
-        {% if not forloop.last %},{% endif %}
-        {% endfor %}
-    ]
-    </script>
+    {% endif %}
+
     <script src="{% static 'script/script.js' %}"></script>
 
     <footer class="footer">

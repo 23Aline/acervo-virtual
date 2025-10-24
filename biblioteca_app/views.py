@@ -516,7 +516,6 @@ def devolver_livro(request, emprestimo_id):
     messages.error(request, "Método inválido para devolução.")
     return redirect("reservas")
 
-@admin_required
 def multa(request):
     query = request.GET.get('q')
     

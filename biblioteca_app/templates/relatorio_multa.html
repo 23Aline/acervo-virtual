@@ -43,8 +43,7 @@
                     <li><a href="{% url 'cadastro_leitor' %}">Cadastro de Leitor</a></li>
                     <li><a href="{% url 'leitores' %}">Leitores</a></li>
                 </ul>
-            </li>
-            {% if request.session.funcao == "administrador" %}
+            </li>          
             <li class="has-submenu">
                 <a href="#">Relatórios</a>
                 <ul class="submenu">
@@ -52,6 +51,7 @@
                     <li><a href="{% url 'relatorio' %}">Relatório de Empréstimos</a></li>
                 </ul>
             </li>
+            {% if request.session.funcao == "administrador" %}
             <li class="has-submenu">
                 <a href="#">Configurações</a>
                 <ul class="submenu">
