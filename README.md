@@ -79,4 +79,10 @@ O projeto estará acessível no link disponível no terminal.
 - **Usuário**: Admin
 - **Senha**: Biblioteca123*
 
+## Desenvolvedores:
+🔗 [Mizaela](https://github.com/Mizaelaa)  
+🔗 [Aline](https://github.com/23Aline)  
+🔗 [Eduardo](https://github.com/eduardoltonon)  
+🔗 [Lucas](https://github.com/Lucas-FernandoJesus)
+
 
