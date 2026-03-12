@@ -1,5 +1,4 @@
-
-<div align="center"> <img width="300" height="300" alt="biblioteca2" src="https://github.com/user-attachments/assets/445323bb-ec6f-4411-b8f4-151b84937d93" /> </div>
+<div align="center">  <img width="300" height="1600" alt="acervo" src="https://github.com/user-attachments/assets/cdfa1969-f283-4e9e-a822-b8e1bee88dc2" /></div>
 
 #  Acervo Virtual
 
