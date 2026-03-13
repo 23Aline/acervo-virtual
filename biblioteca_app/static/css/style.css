@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #9ABF80;
+    background-color: #753f4b;
     position: fixed;
     top: 0;
     left: 0;
@@ -12,7 +12,7 @@
 }
 
 .navbar a {
-    color: black;
+    color: white;
     text-decoration: none;
     font-size: 35px;
     font-weight: bold;
@@ -23,7 +23,7 @@
 }
 
 .logo {
-    height: 55px;
+    height: 90px;
     width: auto;
 }
 
@@ -39,7 +39,7 @@
     right: 0;
     width: 260px;
     height: 100%;
-    background-color: #9ABF80;
+    background-color: #753f4b;
     color: white;
     z-index: 9999;
     padding-top: 100px;
@@ -75,12 +75,12 @@
 
 .side-menu a:hover,
 .side-menu li button:hover {
-    background-color: #53703f;
+    background-color: #3c1e24;
 }
 
 .submenu {
     display: none;
-    background-color: #7fa46d;
+    background-color: #7f6f72;
     margin: 0;
 }
 
@@ -95,7 +95,7 @@
 }
 
 .submenu li a:hover {
-    background-color: #4b6339;
+    background-color: #3c1e24;
 }
 
 .has-submenu.open>.submenu {
@@ -107,7 +107,7 @@
 }
 
 .footer {
-    background-color: #9ABF80;
+    background-color: #753f4b;
     color: #fff;
     display: flex;
     justify-content: center;
@@ -122,7 +122,7 @@
 }
 
 .footer .autor {
-    color: #1C325B;
+    color: #f8be31;
 }
 
 main {
