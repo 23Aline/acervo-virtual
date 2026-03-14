@@ -1,7 +1,9 @@
 .estoque-container {
+    display: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
     max-width: 900px;
-    margin: 40px auto;
-    margin-left: 220px;
 }
 
 .tabela-estoque {

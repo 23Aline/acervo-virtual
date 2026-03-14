@@ -1,3 +1,15 @@
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+header{
+    margin-bottom: 100px;
+}
+
+/*INICIO*/
 .navbar {
     background-color: #753f4b;
     position: fixed;
@@ -9,6 +21,7 @@
     align-items: center;
     z-index: 1010;
     justify-content: space-between;
+    transition: padding 0.3s ease, height 0.3s ease;
 }
 
 .navbar a {
@@ -20,11 +33,13 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    transition: font-size 0.3s ease, margin 0.3s ease;
 }
 
 .logo {
     height: 90px;
     width: auto;
+    transition: height 0.3s ease;
 }
 
 .menu-toggle {
@@ -107,17 +122,15 @@
 }
 
 .footer {
-    background-color: #753f4b;
-    color: #fff;
     display: flex;
     justify-content: center;
+    width: 100%;
+    background-color: #753f4b;
     gap: 30px;
     padding: 2px 10px;
-    align-items: center;
-    bottom: 0;
-    left: 0;
-    width: 100%;
     font-size: 16px;
+    align-items: center;
+    color: #fff;
     margin-top: auto;
 }
 
@@ -125,25 +138,11 @@
     color: #f8be31;
 }
 
-main {
-    min-height: calc(100vh - 120px);
-    margin-right: 260px;
-    padding-top: 100px;
-    padding-bottom: 40px;
-    box-sizing: border-box;
-}
-
 body {
-    background-color: #e9e9e9;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-    height: 100%;
-}
-
-html {
-    overflow-y: scroll;
+    height: 100vh;
+    background-color: #e9e9e9;
 }
 
 /*TELA HOME*/
@@ -180,9 +179,8 @@ html {
 }
 
 .capa-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    width:100%;
+    display:block;
 }
 
 .capa-placeholder {
@@ -213,10 +211,7 @@ html {
     justify-content: center;
     align-items: center;
     padding: 10px;
-    top: 95px;
-    left: 0;
     width: 100%;
-    z-index: 100;
 }
 
 .pesquisa {
@@ -264,7 +259,7 @@ html {
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.6);
   display: none; 
   justify-content: center;
@@ -326,75 +321,27 @@ html {
   color: #1C325B; /
 }
 
+/*FOOTER*/
+    .footer {
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+        gap: 5px;
+        padding: 10px 10px;
+        font-size: 14px;
+    }
+
+    .footer p {
+        margin: 3px 0;
+    }
+
 /*RESPONSIVE*/
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: block;
-        background: none;
-        border: none;
-        color: white;
-        font-size: 24px;
-        cursor: pointer;
-        margin-right: 40px;
-        z-index: 10000;
-        overflow-y: auto;
-    }
+@media (max-width: 549px){
 
-    body.menu-open .side-menu {
-        right: 0;
-    }
-
-    .side-menu ul {
-        display: block;
-        text-align: left;
-    }
-
-    .side-menu li {
-        padding: 0;
-        text-align: left;
-    }
-
-    .side-menu a,
-    .side-menu li button {
-        text-align: left;
-        padding: 12px 20px;
-        margin-top: -5px;
-    }
-
-    .submenu {
-        display: none;
-        position: static;
+    main{
         width: 100%;
-        padding: 0;
     }
 
-    .submenu li {
-        padding: 0;
-        border: none;
-    }
-
-    .submenu li a {
-        padding: 8px 30px;
-    }
-
-    .has-submenu.open>.submenu {
-        display: block;
-    }
-
-    .side-menu form button {
-        background-color: transparent;
-        border: none;
-        color: white;
-        font-size: 18px;
-        text-align: left;
-        cursor: pointer;
-        width: 100%;
-        padding: 12px 20px;
-    }
-
-}
-
-@media (max-width: 480px) {
     .navbar a {
         font-size: 24px;
         margin-left: 10px;
@@ -402,11 +349,6 @@ html {
 
     .logo {
         height: 40px;
-    }
-
-    .side-menu {
-        width: 200px;
-        right: -200px;
     }
 
     body.menu-open .side-menu {
@@ -421,100 +363,162 @@ html {
     .submenu li a {
         font-size: 14px;
     }
+
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 40px;
+        z-index: 10000;
+    }
+
+    .side-menu{
+        right: -260px;
+        transition: right 0.3s ease;
+        box-shadow:-5px 0 15px rgba(0,0,0,0.3);
+    }
+
+    .livros-grid{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    .navbar{
+        transition: right 0.3s ease;
+    }
 }
 
-@media (max-width: 600px) {
-    .footer {
-        flex-direction: column;
-        text-align: center;
-        gap: 5px;
-        padding: 10px 10px;
+@media (min-width: 550px) and (max-width: 799px) {
+
+    main{
+        width: 100%;
+    }
+
+    .navbar a {
+        font-size: 24px;
+        margin-left: 10px;
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+    body.menu-open .side-menu {
+        right: 0;
+    }
+
+    .side-menu a,
+    .side-menu li button {
+        font-size: 16px;
+    }
+
+    .submenu li a {
         font-size: 14px;
     }
 
-    .footer p {
-        margin: 3px 0;
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 40px;
+        z-index: 10000;
+    }
+
+    .side-menu{
+        right: -260px;
+        transition: right 0.3s ease;
+        box-shadow:-5px 0 15px rgba(0,0,0,0.3);
+    }
+
+    .livros-grid{
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+    .navbar{
+        transition: right 0.3s ease;
+    }
+}
+
+@media (min-width: 799px) and (max-width: 1124px) {
+
+    .navbar a {
+        font-size: 38px;
+        margin-left: 10px;
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 40px;
+        z-index: 10000;
+    }
+
+    .side-menu{
+        right: -260px;
+        transition: right 0.3s ease;
+        box-shadow:-5px 0 15px rgba(0,0,0,0.3);
+    }
+
+    body.menu-open .side-menu{
+        right:0;
+    }
+
+    .livros-grid{
+        grid-template-columns: repeat(4, 1fr);
+        transition: right 0.3s ease;
+        gap: 15px;
     }
 }
 
 /*TELA HOME*/
-@media (max-width: 768px) {
-    main {
-        margin-right: 0;
-        width: 100%;
-        box-sizing: border-box;
+@media (min-width: 1124px) and (max-width: 1924px) {
+    .navbar a {
+        font-size: 38px;
+        margin-left: 10px;
     }
 
-    .buscador {
-        width: 100%;
-        top: 80px;
-        padding: 10px;
-        margin-top: -5px;
-        box-sizing: border-box;
+    .logo {
+        height: 40px;
     }
 
-    .pesquisa {
-        display: flex;
-        width: 95%;
-        max-width: 600px;
-        gap: 0;
-    }
-
-    #buscar {
-        padding: 12px 15px;
-        flex-grow: 1;
-    }
-
-    .pesquisa button {
-        width: auto;
-        padding: 12px 15px;
-        border-radius: 0 25px 25px 0;
-    }
-
-    .livros-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-        padding: 20px 10px;
-        margin-top: 25px;
-    }
-
-    .livro-card {
-        width: 100%;
-    }
-
-    .capa-container {
-        height: 250px;
-        width: 100%;
-    }
-
-    .livro-titulo {
-        font-size: 0.95rem;
-    }
-
-    .livro-autor {
-        font-size: 0.85rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .pesquisa {
-        width: 100%;
-        max-width: none;
-    }
-
-    .livros-grid {
-        grid-template-columns: 1fr;
+    .livros-grid{
+        display: grid;
+        justify-content: center;
+        grid-template-columns: repeat(6, 3fr);
         gap: 15px;
-        padding: 15px;
+    }
+    
+    .menu-toggle {
+        display: block;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        margin-right: 40px;
+        z-index: 10000;
     }
 
-    .livro-card {
-        margin: 0 auto;
-        max-width: 250px;
+    .side-menu{
+        right: -260px;
+        transition: right 0.3s ease;
+        box-shadow:-5px 0 15px rgba(0,0,0,0.3);
     }
-
-    .capa-container {
-        width: 100%;
-        height: 300px;
+    
+    body.menu-open .side-menu{
+        right:0;
     }
 }
