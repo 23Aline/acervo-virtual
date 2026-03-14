@@ -352,7 +352,6 @@ html {
     .side-menu li {
         padding: 0;
         text-align: left;
-        border-bottom: 1px solid #7fa46d;
     }
 
     .side-menu a,
@@ -366,7 +365,6 @@ html {
         display: none;
         position: static;
         width: 100%;
-        background-color: #7fa46d;
         padding: 0;
     }
 
@@ -392,10 +390,6 @@ html {
         cursor: pointer;
         width: 100%;
         padding: 12px 20px;
-    }
-
-    .side-menu form button:hover {
-        background-color: #53703f;
     }
 
 }

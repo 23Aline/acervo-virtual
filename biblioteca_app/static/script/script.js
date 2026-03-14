@@ -24,14 +24,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
     /*MENU LATERAL*/
     const menuToggle = document.querySelector('.menu-toggle');
+    const sideMenu = document.querySelector('.side-menu');
     const body = document.body;
 
     if (menuToggle) {
-        menuToggle.addEventListener('click', function () {
+        menuToggle.addEventListener('click', function (event) {
+            event.stopPropagation(); 
             body.classList.toggle('menu-open');
         });
     }
 
+    document.addEventListener('click', function (event) {
+        if (
+            body.classList.contains('menu-open') &&
+            !sideMenu.contains(event.target) &&
+            !menuToggle.contains(event.target)
+        ) {
+            body.classList.remove('menu-open');
+        }
+    });
     const hasSubmenuItems = document.querySelectorAll('.has-submenu > a');
 
     hasSubmenuItems.forEach(item => {
@@ -304,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function () {
             modalEdicaoLivro.style.display = "none";
         }
     });
-    
+
     /*MODAL CONTAS*/
     const btnsEditarConta = document.querySelectorAll('.configuracoes-main .btn-editar');
     const modalEditar = document.getElementById("modal-editar");
